@@ -4,8 +4,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.persist.jpa.JpaPersistModule;
 
-import edu.htwm.vsp.phone.service.PhoneService;
-import edu.htwm.vsp.phone.service.jpa.PhoneServiceImpl;
+import edu.htwm.vsp.phone.service.PhonebookService;
+import edu.htwm.vsp.phone.service.jpa.PhonebookServiceImpl;
 
 public class PhoneModule extends AbstractModule {
 
@@ -29,7 +29,7 @@ public class PhoneModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		install(getPersistModule());
-		bind(PhoneService.class).to(PhoneServiceImpl.class);
+		bind(PhonebookService.class).to(PhonebookServiceImpl.class);
 	}
 	
 }

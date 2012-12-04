@@ -9,12 +9,12 @@ import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;
 
 import edu.htwm.vsp.phone.bind.Modules;
-import edu.htwm.vsp.phone.service.PhoneService;
+import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phone.service.PhoneUser;
 
 public abstract class BaseTest {
 
-	PhoneService phoneService;
+	PhonebookService phoneService;
 	PersistService persistService;
 
 	@Before
@@ -24,7 +24,7 @@ public abstract class BaseTest {
 		persistService = injector.getInstance(PersistService.class);
 		persistService.start();
 		
-		phoneService = injector.getInstance(PhoneService.class);
+		phoneService = injector.getInstance(PhonebookService.class);
 	}
 	
 	@After
@@ -33,11 +33,11 @@ public abstract class BaseTest {
 	}
 	
 	
-	public PhoneUser createUser(PhoneService phoneService) {
+	public PhoneUser createUser(PhonebookService phoneService) {
 		return createUser(phoneService, RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(10) + 1));
 	}
 	
-	public PhoneUser createUser(PhoneService phoneService, String userName) {
+	public PhoneUser createUser(PhonebookService phoneService, String userName) {
 		return phoneService.createUser(userName);
 	}
 }

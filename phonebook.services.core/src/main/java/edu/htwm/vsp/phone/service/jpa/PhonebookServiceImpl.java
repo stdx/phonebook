@@ -8,17 +8,16 @@ import javax.persistence.TypedQuery;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 
-import edu.htwm.vsp.phone.service.NotFoundException;
-import edu.htwm.vsp.phone.service.PhoneService;
 import edu.htwm.vsp.phone.service.PhoneUser;
+import edu.htwm.vsp.phone.service.PhonebookService;
 
 /**
- * An implementation of {@link PhoneService} that utilizes the JPA.
+ * An implementation of {@link PhonebookService} that utilizes the JPA.
  * 
  * @author std
  * 
  */
-public class PhoneServiceImpl implements PhoneService {
+public class PhonebookServiceImpl implements PhonebookService {
 
 	@Inject
 	private EntityManager entityManager;
@@ -32,17 +31,6 @@ public class PhoneServiceImpl implements PhoneService {
 		getEntityManager().persist(u);
 		
 		return u;
-	}
-
-	@Override
-	@Transactional
-	public PhoneUser findUserByName(String name) throws NotFoundException {
-		
-//		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-//		TypedQuery<User> q = getEntityManager().createQuery("SELECT u FROM User u WHERE u.name LIKE :name", User.class);
-//		q.setParameter("name", name);
-
-		return null;
 	}
 
 	@Override
@@ -65,8 +53,9 @@ public class PhoneServiceImpl implements PhoneService {
 
 
 	@Override
+	@Transactional
 	public List<PhoneUser> fetchAllUsers() {
-		TypedQuery<PhoneUser> q = getEntityManager().createQuery("SELECT u from User u", PhoneUser.class);
+		TypedQuery<PhoneUser> q = getEntityManager().createQuery("SELECT u from PhoneUser u", PhoneUser.class);
 		List<PhoneUser> results = q.getResultList();
 		 
 		 return results;

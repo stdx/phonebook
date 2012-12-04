@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 /**
@@ -17,10 +20,13 @@ import javax.persistence.OneToMany;
 @Entity
 public class PhoneUser extends BaseEntity {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
+	
 	private String name;
 	
-	@OneToMany(
-		cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<PhoneNumber> phoneNumbers;
 	
 	public PhoneUser() {
@@ -32,6 +38,14 @@ public class PhoneUser extends BaseEntity {
 		phoneNumbers = new ArrayList<PhoneNumber>();
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -54,7 +68,10 @@ public class PhoneUser extends BaseEntity {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
+		result = prime * result + id;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((phoneNumbers == null) ? 0 : phoneNumbers.hashCode());
 		return result;
 	}
 
@@ -67,13 +84,22 @@ public class PhoneUser extends BaseEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		PhoneUser other = (PhoneUser) obj;
+		if (id != other.id)
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
+		if (phoneNumbers == null) {
+			if (other.phoneNumbers != null)
+				return false;
+		} else if (!phoneNumbers.equals(other.phoneNumbers))
+			return false;
 		return true;
 	}
+
+
 	
 	
 	

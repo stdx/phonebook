@@ -2,7 +2,10 @@ package edu.htwm.vsp.phone.services.jpa;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isIn;
 import static org.hamcrest.Matchers.nullValue;
+
+import java.util.List;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
@@ -10,7 +13,7 @@ import org.junit.Test;
 
 import edu.htwm.vsp.phone.service.PhoneUser;
 
-public class UserCRUDTests extends BaseTest {
+public class PhoneUserTests extends BaseTest {
 	
 	@Test
 	public void createValidUser() {
@@ -23,6 +26,9 @@ public class UserCRUDTests extends BaseTest {
 		
 		PhoneUser userFetchedFromDB = phoneService.findUserById(newUser.getId());
 		assertThat(userFetchedFromDB, is(newUser));
+		List<PhoneUser> allUsers = phoneService.fetchAllUsers();
+		assertThat(userFetchedFromDB, isIn(allUsers));
+		
 	}
 	
 	@Test
@@ -30,17 +36,17 @@ public class UserCRUDTests extends BaseTest {
 		
 		PhoneUser expectedUser = createUser(phoneService);
 		
-		
 		PhoneUser userFetchedFromDB = phoneService.findUserById(expectedUser.getId());
 		assertThat(userFetchedFromDB, is(expectedUser));
-
+		List<PhoneUser> allUsers = phoneService.fetchAllUsers();
+		assertThat(userFetchedFromDB, isIn(allUsers));
+		
+		
 		phoneService.deleteUser(userFetchedFromDB.getId());
 		
 		userFetchedFromDB = phoneService.findUserById(expectedUser.getId());
 		assertThat(userFetchedFromDB, is(nullValue()));
 		
 	}
-	
-	
 
 }

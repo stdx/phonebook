@@ -11,8 +11,8 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.htwm.vsp.phone.service.PhoneService;
-import edu.htwm.vsp.phone.service.jpa.PhoneServiceImpl;
+import edu.htwm.vsp.phone.service.PhonebookService;
+import edu.htwm.vsp.phone.service.jpa.PhonebookServiceImpl;
 import edu.htwm.vsp.phonebook.rest.UsersResource;
 
 public class UsersResourceImplTest {
@@ -23,7 +23,7 @@ public class UsersResourceImplTest {
 	public void prepareResources() {
 		
 		UsersResourceImpl usersResource = new UsersResourceImpl();
-		PhoneService phoneService = new PhoneServiceImpl();
+		PhonebookService phoneService = new PhonebookServiceImpl();
 		
 		usersResource.setPhoneService(phoneService);
 		

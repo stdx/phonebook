@@ -7,13 +7,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import edu.htwm.vsp.phone.service.PhoneService;
+import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phone.service.PhoneUser;
 import edu.htwm.vsp.phonebook.rest.UsersResource;
 
 public class UsersResourceImpl implements UsersResource {
 
-	private PhoneService phoneService;
+	private PhonebookService phoneService;
 	
 	@Override
 	public Response listUsers() {
@@ -47,11 +47,11 @@ public class UsersResourceImpl implements UsersResource {
 		return null;
 	}
 
-	public PhoneService getPhoneService() {
+	public PhonebookService getPhoneService() {
 		return phoneService;
 	}
 
-	public void setPhoneService(PhoneService phoneService) {
+	public void setPhoneService(PhonebookService phoneService) {
 		this.phoneService = phoneService;
 	}
 
