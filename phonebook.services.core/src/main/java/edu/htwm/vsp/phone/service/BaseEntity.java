@@ -1,4 +1,4 @@
-package edu.htwm.vsp.phone.entity;
+package edu.htwm.vsp.phone.service;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,6 +30,31 @@ public abstract class BaseEntity {
 
 	public void setVersion(int version) {
 		this.version = version;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + version;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BaseEntity other = (BaseEntity) obj;
+		if (id != other.id)
+			return false;
+		if (version != other.version)
+			return false;
+		return true;
 	}
 	
 }

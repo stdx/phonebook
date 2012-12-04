@@ -1,4 +1,4 @@
-package edu.htwm.vsp.phone.services;
+package edu.htwm.vsp.phone.service;
 
 public class NotFoundException extends Exception {
 

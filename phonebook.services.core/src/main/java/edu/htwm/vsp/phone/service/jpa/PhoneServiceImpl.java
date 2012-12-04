@@ -1,15 +1,16 @@
-package edu.htwm.vsp.phone.services.jpa;
+package edu.htwm.vsp.phone.service.jpa;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 
-import edu.htwm.vsp.phone.entity.User;
-import edu.htwm.vsp.phone.services.NotFoundException;
-import edu.htwm.vsp.phone.services.PhoneService;
+import edu.htwm.vsp.phone.service.NotFoundException;
+import edu.htwm.vsp.phone.service.PhoneService;
+import edu.htwm.vsp.phone.service.PhoneUser;
 
 /**
  * An implementation of {@link PhoneService} that utilizes the JPA.
@@ -19,20 +20,23 @@ import edu.htwm.vsp.phone.services.PhoneService;
  */
 public class PhoneServiceImpl implements PhoneService {
 
+	@Inject
 	private EntityManager entityManager;
 	
 	
 	@Override
 	@Transactional
-	public User createUser(String name) {
-		User u = new User(name);
+	public PhoneUser createUser(String name) {
+		
+		PhoneUser u = new PhoneUser(name);
 		getEntityManager().persist(u);
+		
 		return u;
 	}
 
 	@Override
 	@Transactional
-	public User findUserByName(String name) throws NotFoundException {
+	public PhoneUser findUserByName(String name) throws NotFoundException {
 		
 //		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 //		TypedQuery<User> q = getEntityManager().createQuery("SELECT u FROM User u WHERE u.name LIKE :name", User.class);
@@ -43,31 +47,37 @@ public class PhoneServiceImpl implements PhoneService {
 
 	@Override
 	@Transactional
-	public User findUserById(int userID) {
-		return getEntityManager().find(User.class, userID);
+	public PhoneUser findUserById(int userID) {
+		return getEntityManager().find(PhoneUser.class, userID);
 	}
 	
+	@Override
+	@Transactional
 	public void deleteUser(int userID) {
-		User userToDelete = findUserById(userID);
+		PhoneUser userToDelete = findUserById(userID);
+		
+		if(userToDelete == null)
+			return;
+		
 		getEntityManager().remove(userToDelete);
 		getEntityManager().flush();
 	}
 
-	
+
+	@Override
+	public List<PhoneUser> fetchAllUsers() {
+		TypedQuery<PhoneUser> q = getEntityManager().createQuery("SELECT u from User u", PhoneUser.class);
+		List<PhoneUser> results = q.getResultList();
+		 
+		 return results;
+	}
+
 	public EntityManager getEntityManager() {
 		return entityManager;
 	}
 
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
-	}
-
-	@Override
-	public List<User> fetchAllUsers() {
-		TypedQuery<User> q = getEntityManager().createQuery("SELECT u from User u", User.class);
-		List<User> results = q.getResultList();
-		 
-		 return results;
 	}
 
 }

@@ -4,9 +4,10 @@
 	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
 
 	<persistence-unit name="phonebook" transaction-type="RESOURCE_LOCAL">
+	 	<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:derby:/home/vogella/databases/phonebook;create=true" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:derby:${user.home}/.phonebook;create=true" />
 
 			<property name="javax.persistence.jdbc.user" value="test" />
 			<property name="javax.persistence.jdbc.password" value="test" />
@@ -18,10 +19,11 @@
 	</persistence-unit>
 
 
-	<persistence-unit name="phonebook-test">
+	<persistence-unit name="phonebook-test" transaction-type="RESOURCE_LOCAL">
+	 	<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:myDB;create=true" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:phonebook;create=true" />
 
 			<property name="javax.persistence.jdbc.user" value="test" />
 			<property name="javax.persistence.jdbc.password" value="test" />

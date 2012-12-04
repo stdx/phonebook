@@ -1,4 +1,4 @@
-package edu.htwm.vsp.phone.entity;
+package edu.htwm.vsp.phone.service;
 
 import javax.persistence.Entity;
 

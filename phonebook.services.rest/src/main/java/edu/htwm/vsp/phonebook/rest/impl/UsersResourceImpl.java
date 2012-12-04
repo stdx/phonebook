@@ -7,8 +7,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import edu.htwm.vsp.phone.entity.User;
-import edu.htwm.vsp.phone.services.PhoneService;
+import edu.htwm.vsp.phone.service.PhoneService;
+import edu.htwm.vsp.phone.service.PhoneUser;
 import edu.htwm.vsp.phonebook.rest.UsersResource;
 
 public class UsersResourceImpl implements UsersResource {
@@ -18,7 +18,7 @@ public class UsersResourceImpl implements UsersResource {
 	@Override
 	public Response listUsers() {
 		
-		List<User> allUsers = getPhoneService().fetchAllUsers();
+		List<PhoneUser> allUsers = getPhoneService().fetchAllUsers();
 		
 		Response r = null;
 		if(allUsers == null || allUsers.isEmpty()) {
@@ -33,7 +33,7 @@ public class UsersResourceImpl implements UsersResource {
 	@Override
 	public Response addUser(UriInfo uriInfo, String name) {
 		
-		User newUser = getPhoneService().createUser(name);
+		PhoneUser newUser = getPhoneService().createUser(name);
 		
 		UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
 		URI created = absolutePathBuilder.path(UsersResource.class, "getUser").build(newUser.getId());

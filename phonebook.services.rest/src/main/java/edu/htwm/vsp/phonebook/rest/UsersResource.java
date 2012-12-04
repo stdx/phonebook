@@ -11,14 +11,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import edu.htwm.vsp.phone.entity.User;
+import edu.htwm.vsp.phone.service.PhoneUser;
 
 @Path("users")
 public interface UsersResource {
 
 	/**
-	 * 
-	 * Creates a new {@link User} with the given name.
+	 * Creates a new {@link PhoneUser} with the given name.
 	 * 
 	 * @param uriInfo
 	 *            Injected by JAX-RS. Used for building the correct path to the

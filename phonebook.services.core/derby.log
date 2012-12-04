@@ -1,0 +1,10 @@
+----------------------------------------------------------------
+Tue Dec 04 12:33:21 CET 2012:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.9.1.0 - (1344872): instance a816c00e-013b-65b1-113b-0000057646b0 
+on database directory memory:/home/std/dev/lehre/phonebook/phonebook.services.core/phonebook  with class loader sun.misc.Launcher$AppClassLoader@7d6d4e3e 
+Loaded from file:/home/std/.m2/repository/org/apache/derby/derby/10.9.1.0/derby-10.9.1.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_09-b05
+user.dir=/home/std/dev/lehre/phonebook/phonebook.services.core
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
