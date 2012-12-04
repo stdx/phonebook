@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>phonebook.services.rest</artifactId>
-	<packaging>war</packaging>
+<!-- 	<packaging>war</packaging> -->
 
 
 	<dependencies>
