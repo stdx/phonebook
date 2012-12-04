@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * 
@@ -18,7 +20,8 @@ import javax.persistence.OneToMany;
  *
  */
 @Entity
-public class PhoneUser extends BaseEntity {
+@XmlRootElement(name = "user")
+public class PhoneUser  {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,6 +41,7 @@ public class PhoneUser extends BaseEntity {
 		phoneNumbers = new ArrayList<PhoneNumber>();
 	}
 
+	@XmlAttribute
 	public int getId() {
 		return id;
 	}

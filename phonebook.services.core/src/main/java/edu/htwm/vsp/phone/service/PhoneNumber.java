@@ -3,6 +3,7 @@ package edu.htwm.vsp.phone.service;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * 
@@ -13,7 +14,8 @@ import javax.persistence.ManyToOne;
  * 
  */
 @Entity
-public class PhoneNumber extends BaseEntity {
+@XmlRootElement(name = "phone-number")
+public class PhoneNumber  {
 
 	@Id
 	private String caption;

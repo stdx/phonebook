@@ -1,25 +1,32 @@
 package edu.htwm.vsp.phonebook.rest.impl;
 
 import java.net.URI;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import edu.htwm.vsp.phone.service.PhonebookService;
+import com.google.inject.Inject;
+import com.google.inject.servlet.RequestScoped;
+
 import edu.htwm.vsp.phone.service.PhoneUser;
+import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phonebook.rest.UsersResource;
 
-public class UsersResourceImpl implements UsersResource {
+@RequestScoped
+public class UsersResourceImpl<E> implements UsersResource {
 
+	@Inject
 	private PhonebookService phoneService;
 	
 	@Override
 	public Response listUsers() {
 		
-		List<PhoneUser> allUsers = getPhoneService().fetchAllUsers();
-		
+		List<PhoneUser> allUsersFromDB = getPhoneService().fetchAllUsers();
+		List<PhoneUser> allUsers = new LinkedList<PhoneUser>(allUsersFromDB);
 		Response r = null;
 		if(allUsers == null || allUsers.isEmpty()) {
 			r = Response.noContent().build();
@@ -31,7 +38,7 @@ public class UsersResourceImpl implements UsersResource {
 	}
 
 	@Override
-	public Response addUser(UriInfo uriInfo, String name) {
+	public Response createUser(UriInfo uriInfo, String name) {
 		
 		PhoneUser newUser = getPhoneService().createUser(name);
 		
@@ -43,8 +50,14 @@ public class UsersResourceImpl implements UsersResource {
 
 	@Override
 	public Response getUser(int userID) {
-		// TODO Auto-generated method stub
-		return null;
+		PhoneUser userById = phoneService.findUserById(userID);
+		
+		Response r = null;
+		if(userById == null)
+			r = Response.status(Status.NOT_FOUND).build();
+		else
+			r = Response.ok(userById).build();
+		return r;
 	}
 
 	public PhonebookService getPhoneService() {

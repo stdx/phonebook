@@ -11,6 +11,7 @@ clients_nosql.dat
 visits_info.dat
 private.xml
 visits_*.dat
+*.log
 
 /fingerprint-client/visits_info.dat.orig
 *~

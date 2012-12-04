@@ -12,7 +12,7 @@ public class PhoneModule extends AbstractModule {
 	private final String persistenceUnit;
 	private final Module persistModule;
 
-	public PhoneModule(String persistenceUnit) {
+	private PhoneModule(String persistenceUnit) {
 		this.persistenceUnit = persistenceUnit;
 		persistModule = new JpaPersistModule(persistenceUnit);
 		
@@ -31,5 +31,14 @@ public class PhoneModule extends AbstractModule {
 		install(getPersistModule());
 		bind(PhonebookService.class).to(PhonebookServiceImpl.class);
 	}
+	
+	public static Module build() {
+		return new PhoneModule("phonebook");
+	}
+	
+	public static Module buildForTest() {
+		return new PhoneModule("phonebook-test");
+	}
+	
 	
 }

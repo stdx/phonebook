@@ -1,11 +1,11 @@
 package edu.htwm.vsp.phonebook.rest;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -16,6 +16,8 @@ import edu.htwm.vsp.phone.service.PhoneUser;
 @Path("users")
 public interface UsersResource {
 
+	public static final String USER_ID = "id";
+	
 	/**
 	 * Creates a new {@link PhoneUser} with the given name.
 	 * 
@@ -28,16 +30,27 @@ public interface UsersResource {
 	 * @return 201 CREATED and the path for accessing the new user
 	 */
 	@POST
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-	Response addUser(
+	Response createUser(
 		@Context UriInfo uriInfo,
 		@FormParam("name") String name);
 	
+	/**
+	 * Fetches an existing user by its id.
+	 * 
+	 * @param userID
+	 *            The id of the user to fetch.
+	 * @return 200 - and the found user if one exists, an appropriate HTTP status
+	 *         code else.
+	 */
+	@GET
+	@Path("{" + USER_ID + "}")
+	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+	Response getUser(
+		@QueryParam(USER_ID) int userID);
+	
 	@GET
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-	Response getUser(int userID);
-	
 	Response listUsers();
 	
 }

@@ -3,6 +3,7 @@ package edu.htwm.vsp.phone.service;
 import java.util.List;
 
 /**
+ * A service that manages a phone book.
  * 
  * @author std
  *

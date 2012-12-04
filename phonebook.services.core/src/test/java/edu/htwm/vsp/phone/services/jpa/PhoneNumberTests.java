@@ -14,7 +14,7 @@ public class PhoneNumberTests extends BaseTest {
 	@Test
 	public void addSingleNumberToUser() {
 		
-		PhoneUser newUser = createUser(phoneService);
+		PhoneUser newUser = createRandomUser(phoneService);
 		
 		String phoneNumberCaption = RandomStringUtils.randomAlphanumeric(10);
 		String phoneNumber = RandomStringUtils.randomAlphanumeric(8);
