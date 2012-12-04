@@ -34,8 +34,8 @@
 	<!-- Module definieren Kind-Projekte, die beim Build mit gebaut werden. 
 		Der Name des Moduls muss dem Verzeichnisnamen entsprechen -->
 	<modules>
-	<module>phonebook.services.core</module>
-	<module>phonebook.services.rest</module>
+		<module>phonebook.services.core</module>
+		<module>phonebook.services.rest</module>
 	</modules>
 
 	<!-- Mit dependencies werden Abhaengigkeiten bestimmt. Abhengigkeiten sind 
