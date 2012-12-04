@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isIn;
 import static org.hamcrest.Matchers.nullValue;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -30,10 +31,11 @@ public class PhoneUserTests extends BaseTest {
 		assertThat(expectedUser.getName(), is(expectedName));
 		
 		/*
-		 * Den neu erstellten Nutzer aus der Datenbank per ID holen und dann mit
+		 * TODO Den neu erstellten Nutzer aus der Datenbank per ID holen und dann mit
 		 * dem erwarteten Nutzer vergleichen.
 		 */
-		PhoneUser userFetchedFromDB = phoneService.findUserById(expectedUser.getId());
+		PhoneUser userFetchedFromDB = null;
+		
 		assertThat(userFetchedFromDB, is(expectedUser));
 		
 		/*
@@ -42,8 +44,7 @@ public class PhoneUserTests extends BaseTest {
 		 */
 		
 		// -----
-		// List<PhoneUser> allUsers = phoneService.fetchAllUsers();
-		List<PhoneUser> allUsers = null;
+		List<PhoneUser> allUsers = Collections.emptyList();
 		assertThat(userFetchedFromDB, isIn(allUsers));
 		// ------
 		
@@ -60,8 +61,7 @@ public class PhoneUserTests extends BaseTest {
 		 */
 		PhoneUser expectedUser = createRandomUser(phoneService);
 		
-		// den Nutzer löschen
-		phoneService.deleteUser(expectedUser.getId());
+		// TODO den Nutzer löschen
 		
 		/**
 		 * TODO Versuchen den gelöschten Nutzer per ID (expectedUser.getId())
@@ -71,7 +71,7 @@ public class PhoneUserTests extends BaseTest {
 		 * s. Dokumentation PhoneService
 		 * 
 		 */
-		expectedUser = phoneService.findUserById(expectedUser.getId());
+		expectedUser = null;
 		assertThat(expectedUser, is(nullValue()));
 		
 	}

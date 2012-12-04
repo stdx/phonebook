@@ -23,6 +23,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "user")
 public class PhoneUser  {
 	
+
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
@@ -101,6 +103,12 @@ public class PhoneUser  {
 		} else if (!phoneNumbers.equals(other.phoneNumbers))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "PhoneUser [id=" + id + ", name=" + name + ", phoneNumbers="
+				+ phoneNumbers + "]";
 	}
 
 

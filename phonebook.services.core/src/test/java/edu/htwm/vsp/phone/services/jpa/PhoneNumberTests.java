@@ -2,6 +2,7 @@ package edu.htwm.vsp.phone.services.jpa;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isIn;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
@@ -22,7 +23,14 @@ public class PhoneNumberTests extends BaseTest {
 		PhoneNumber newNumber = new PhoneNumber(newUser, phoneNumberCaption, phoneNumber);
 		newUser.getPhoneNumbers().add(newNumber);
 		
-		PhoneUser userFetchedFromDB = phoneService.findUserById(newUser.getId());
+		/*
+		 * TODO Den Nutzer über PhoneService per ID aus der Datenbank holen und überprüfen ob die Nummer 
+		 * im Nutzer enthalten ist.
+		 */
+		PhoneUser userFetchedFromDB = null;
+		
 		assertThat(userFetchedFromDB.getPhoneNumbers().size(), is(1));
+		assertThat(newNumber, isIn(userFetchedFromDB.getPhoneNumbers()));
 	}
+	
 }

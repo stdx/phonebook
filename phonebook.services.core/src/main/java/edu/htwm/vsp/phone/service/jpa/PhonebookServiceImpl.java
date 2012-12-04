@@ -55,6 +55,7 @@ public class PhonebookServiceImpl implements PhonebookService {
 	@Override
 	@Transactional
 	public List<PhoneUser> fetchAllUsers() {
+		
 		TypedQuery<PhoneUser> q = getEntityManager().createQuery("SELECT u from PhoneUser u", PhoneUser.class);
 		List<PhoneUser> results = q.getResultList();
 		 
