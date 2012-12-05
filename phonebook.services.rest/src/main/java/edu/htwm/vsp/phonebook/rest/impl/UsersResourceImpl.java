@@ -17,7 +17,7 @@ import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phonebook.rest.UsersResource;
 
 @RequestScoped
-public class UsersResourceImpl<E> implements UsersResource {
+public class UsersResourceImpl implements UsersResource {
 
 	@Inject
 	private PhonebookService phoneService;
