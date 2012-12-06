@@ -24,7 +24,7 @@ public class UsersResourceImplTest extends BaseResourceTest {
 		usersResource = new UsersResourceImpl();
 		usersResource.setPhoneService(phoneService);
 	}
-	
+	/*
 	@Test
 	public void createSingleNewUserWorks() {
 		
@@ -47,6 +47,6 @@ public class UsersResourceImplTest extends BaseResourceTest {
 //		// check location
 //		MultivaluedMap<String, Object> metadata = addUserResponse.getMetadata();
 	}
-
+*/
 
 }

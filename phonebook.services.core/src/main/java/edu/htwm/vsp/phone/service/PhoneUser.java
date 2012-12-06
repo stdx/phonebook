@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -20,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 @Entity
-@XmlRootElement(name = "user")
+@XmlRootElement(name = "elefant")
 public class PhoneUser  {
 	
 	@Id
@@ -41,7 +43,7 @@ public class PhoneUser  {
 		phoneNumbers = new ArrayList<PhoneNumber>();
 	}
 
-	@XmlAttribute
+	@XmlElement
 	public int getId() {
 		return id;
 	}
@@ -58,6 +60,7 @@ public class PhoneUser  {
 		this.name = name;
 	}
 
+        @XmlElementWrapper        
 	public List<PhoneNumber> getPhoneNumbers() {
 		if(phoneNumbers == null)
 			this.phoneNumbers = new ArrayList<PhoneNumber>();
