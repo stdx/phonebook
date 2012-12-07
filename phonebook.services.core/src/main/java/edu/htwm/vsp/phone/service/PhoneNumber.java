@@ -17,21 +17,20 @@ import javax.xml.bind.annotation.XmlTransient;
  * 
  */
 @Entity
-@XmlRootElement
+@XmlRootElement(name="number")
 public class PhoneNumber  {
 
 	@Id
 	private String caption;
 	private String number;
-	@ManyToOne
-	private PhoneUser user;
+	
 	
 
 	protected PhoneNumber() {
 	}
 
-	public PhoneNumber(PhoneUser user, String caption, String number) {
-		this.user = user;
+	public PhoneNumber(String caption, String number) {
+		
 		this.caption = caption;
 		this.number = number;
 	}
@@ -83,14 +82,5 @@ public class PhoneNumber  {
 		return true;
 	}
 
-        
-        @XmlTransient // XmlTransient, da JAXB Probleme mit Ringbeziehung 
-	public PhoneUser getUser() {
-		return user;
-	}
 
-	public void setUser(PhoneUser user) {
-		this.user = user;
-	}
-	
 }

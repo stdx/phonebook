@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlValue;
 
 /**
  * 
@@ -22,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 @Entity
-@XmlRootElement(name = "elefant")
+@XmlRootElement(name = "user")
 public class PhoneUser  {
 	
 	@Id
@@ -31,7 +32,7 @@ public class PhoneUser  {
 	
 	private String name;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<PhoneNumber> phoneNumbers;
 	
 	public PhoneUser() {
@@ -43,7 +44,7 @@ public class PhoneUser  {
 		phoneNumbers = new ArrayList<PhoneNumber>();
 	}
 
-	@XmlElement
+	@XmlAttribute
 	public int getId() {
 		return id;
 	}
@@ -60,7 +61,9 @@ public class PhoneUser  {
 		this.name = name;
 	}
 
-        @XmlElementWrapper        
+        
+        @XmlElement(name="number")
+        @XmlElementWrapper(name="phone-numbers")        
 	public List<PhoneNumber> getPhoneNumbers() {
 		if(phoneNumbers == null)
 			this.phoneNumbers = new ArrayList<PhoneNumber>();

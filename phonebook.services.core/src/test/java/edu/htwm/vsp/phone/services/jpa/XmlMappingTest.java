@@ -26,11 +26,14 @@ import static org.hamcrest.Matchers.is;
 /**
  *
  * @author adopleb
+ *
+ * Testet, ob die JAXB-Annotationen korrekt gesetzt sind und das das XML-Mapping
+ * fehlerfrei funktioniert
  */
-public class XmlTest extends BaseTest {
+public class XmlMappingTest extends BaseTest {
 
-    File TESTFILE_LOAD = new File("src/test/resources/anne.xml");
-    File TESTFILE_SAVE = new File("src/test/resources/random.xml");
+    private File testfileLoad = new File("src/test/resources/anne.xml");
+    private File testfileSave = new File("src/test/resources/random.xml");
 
     /**
      * Testet ob eine XML-Datei korrekt angelegt wird
@@ -39,59 +42,47 @@ public class XmlTest extends BaseTest {
     public void createValidXmlFile() throws IOException, JAXBException {
 
         // Lösche Datei falls schon vorhanden
-        if(TESTFILE_SAVE.exists())
-        {
-             TESTFILE_SAVE.delete();
+        if (testfileSave.exists()) {
+            testfileSave.delete();
         }
-        
+
         /*
          * Erzeugt einen Nutzer mit einem zufälligen Namen und einer zufälligen Telefonnummer.
          */
         PhoneUser newUser = createRandomUser(phoneService);
         String phoneNumberCaption = RandomStringUtils.randomAlphanumeric(10);
         String phoneNumber = RandomStringUtils.randomAlphanumeric(8);
-        PhoneNumber newNumber = new PhoneNumber(newUser, phoneNumberCaption, phoneNumber);
+        PhoneNumber newNumber = new PhoneNumber(phoneNumberCaption, phoneNumber);
         newUser.getPhoneNumbers().add(newNumber);
 
         JAXBContext context = JAXBContext.newInstance(PhoneUser.class, PhoneNumber.class);
         Marshaller m = context.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-       
-
         // XML-Datei schreiben
-        m.marshal(newUser, new FileWriter(TESTFILE_SAVE));
+        m.marshal(newUser, new FileWriter(testfileSave));
         // Teste ob Datei existiert und lesbar ist
-        assertThat(TESTFILE_SAVE.exists(), is(true));
-        assertThat(TESTFILE_SAVE.isFile(), is(true));
-
-
+        assertThat(testfileSave.exists(), is(true));
+        assertThat(testfileSave.isFile(), is(true));
     }
 
     /**
-     * ließt aus XML-Datei *
+     * liest aus XML-Datei *
      */
     @Test
     public void loadFromXmlFile() throws IOException, JAXBException {
 
         JAXBContext context = JAXBContext.newInstance(PhoneUser.class, PhoneNumber.class);
         Unmarshaller um = context.createUnmarshaller();
-        PhoneUser loadedUser = (PhoneUser) um.unmarshal(new FileReader(TESTFILE_LOAD));
-
-        // Da in PhoneUser Annotation @XmlTransient, muss nun die Referenz manuell gesetzt werden
-        for (PhoneNumber number : loadedUser.getPhoneNumbers()) {
-            number.setUser(loadedUser);
-        }
+        PhoneUser loadedUser = (PhoneUser) um.unmarshal(new FileReader(testfileLoad));
 
         List<PhoneNumber> phoneNumbers = loadedUser.getPhoneNumbers();
 
         // prüft, ob die beiden Telefonnummern enthalten sind
-        assertThat(phoneNumbers.size(), is(2));        
+        assertThat(phoneNumbers.size(), is(2));
         // prüft, ob der Name erkannt wurde
-        assertThat(loadedUser.getName(), is("anne"));        
+        assertThat(loadedUser.getName(), is("anne"));
         // prüft, dass die ID stimmt
         assertThat(loadedUser.getId(), is(1));
-
-
     }
 }
