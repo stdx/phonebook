@@ -14,10 +14,10 @@ import com.google.inject.servlet.RequestScoped;
 
 import edu.htwm.vsp.phone.service.PhoneUser;
 import edu.htwm.vsp.phone.service.PhonebookService;
-import edu.htwm.vsp.phonebook.rest.UsersResource;
+import edu.htwm.vsp.phonebook.rest.PhonebookResource;
 
 @RequestScoped
-public class UsersResourceImpl implements UsersResource {
+public class PhonebookResourceImpl implements PhonebookResource {
 
 	@Inject
 	private PhonebookService phoneService;
@@ -43,9 +43,9 @@ public class UsersResourceImpl implements UsersResource {
 		PhoneUser newUser = getPhoneService().createUser(name);
 		
 		UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
-		URI created = absolutePathBuilder.path(UsersResource.class, "getUser").build(newUser.getId());
+		URI created = absolutePathBuilder.path(PhonebookResource.class, "getUser").build(newUser.getId());
 		
-		return Response.created(created).build();
+		return Response.created(created).entity(newUser).build();
 	}
 
 	@Override

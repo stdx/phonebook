@@ -23,6 +23,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "user")
 public class PhoneUser  {
 	
+	@Override
+	public String toString() {
+		return "PhoneUser [id=" + id + ", name=" + name + ", phoneNumbers="
+				+ phoneNumbers + "]";
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;

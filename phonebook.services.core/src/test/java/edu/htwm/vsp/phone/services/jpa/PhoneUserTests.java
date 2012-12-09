@@ -37,15 +37,11 @@ public class PhoneUserTests extends BaseTest {
 		assertThat(userFetchedFromDB, is(expectedUser));
 		
 		/*
-		 * TODO Alle Nutzer aus der Datenbank holen und prüfen ob der neu
-		 * erstellte Nutzer enthalten ist.
+		 * Alle Nutzer aus der Datenbank holen und prüfen ob der neu erstellte
+		 * Nutzer enthalten ist.
 		 */
-		
-		// -----
-		// List<PhoneUser> allUsers = phoneService.fetchAllUsers();
-		List<PhoneUser> allUsers = null;
+		List<PhoneUser> allUsers = phoneService.fetchAllUsers();
 		assertThat(userFetchedFromDB, isIn(allUsers));
-		// ------
 		
 	}
 	
@@ -64,7 +60,7 @@ public class PhoneUserTests extends BaseTest {
 		phoneService.deleteUser(expectedUser.getId());
 		
 		/**
-		 * TODO Versuchen den gelöschten Nutzer per ID (expectedUser.getId())
+		 * Versuchen den gelöschten Nutzer per ID (expectedUser.getId())
 		 * aus der Datenbank zu holen und überprüfen ob der Rückgabewert null
 		 * ist.
 		 * 

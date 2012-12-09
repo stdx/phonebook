@@ -14,9 +14,9 @@ import javax.ws.rs.core.UriInfo;
 import edu.htwm.vsp.phone.service.PhoneUser;
 
 @Path("users")
-public interface UsersResource {
+public interface PhonebookResource {
 
-	public static final String USER_ID = "id";
+	public static final String USER_ID_PARAM = "id";
 	
 	/**
 	 * Creates a new {@link PhoneUser} with the given name.
@@ -25,9 +25,10 @@ public interface UsersResource {
 	 *            Injected by JAX-RS. Used for building the correct path to the
 	 *            newly created resource.
 	 * @param name
-	 *            The name of the new user.
+	 *            The name of the user to create.
 	 * 
-	 * @return 201 CREATED and the path for accessing the new user
+	 * @return 201 CREATED and the path for accessing the new user, an
+	 *         appropriate status code otherwise.
 	 */
 	@POST
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -44,10 +45,10 @@ public interface UsersResource {
 	 *         code else.
 	 */
 	@GET
-	@Path("{" + USER_ID + "}")
+	@Path("{" + USER_ID_PARAM + "}")
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 	Response getUser(
-		@QueryParam(USER_ID) int userID);
+		@QueryParam(USER_ID_PARAM) int userID);
 	
 	@GET
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
