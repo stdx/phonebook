@@ -19,7 +19,7 @@ public class PhoneNumberTests extends BaseTest {
 		String phoneNumberCaption = RandomStringUtils.randomAlphanumeric(10);
 		String phoneNumber = RandomStringUtils.randomAlphanumeric(8);
 		
-		PhoneNumber newNumber = new PhoneNumber(newUser, phoneNumberCaption, phoneNumber);
+		PhoneNumber newNumber = new PhoneNumber(phoneNumberCaption, phoneNumber);
 		newUser.getPhoneNumbers().add(newNumber);
 		
 		PhoneUser userFetchedFromDB = phoneService.findUserById(newUser.getId());

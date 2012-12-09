@@ -68,6 +68,7 @@ public class PhoneUserTests extends BaseTest {
 		 * 
 		 */
 		expectedUser = phoneService.findUserById(expectedUser.getId());
+
 		assertThat(expectedUser, is(nullValue()));
 		
 	}

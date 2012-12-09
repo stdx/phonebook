@@ -3,7 +3,10 @@ package edu.htwm.vsp.phone.service;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * 
@@ -14,21 +17,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  */
 @Entity
-@XmlRootElement(name = "phone-number")
+@XmlRootElement(name="number")
 public class PhoneNumber  {
 
 	@Id
 	private String caption;
 	private String number;
-	@ManyToOne
-	private PhoneUser user;
+	
 	
 
 	protected PhoneNumber() {
 	}
 
-	public PhoneNumber(PhoneUser user, String caption, String number) {
-		this.user = user;
+	public PhoneNumber(String caption, String number) {
+		
 		this.caption = caption;
 		this.number = number;
 	}
@@ -80,12 +82,5 @@ public class PhoneNumber  {
 		return true;
 	}
 
-	public PhoneUser getUser() {
-		return user;
-	}
 
-	public void setUser(PhoneUser user) {
-		this.user = user;
-	}
-	
 }

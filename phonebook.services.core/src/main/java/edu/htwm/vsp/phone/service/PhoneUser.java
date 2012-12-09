@@ -10,7 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlValue;
 
 /**
  * 
@@ -35,7 +38,7 @@ public class PhoneUser  {
 	
 	private String name;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<PhoneNumber> phoneNumbers;
 	
 	public PhoneUser() {
@@ -64,6 +67,9 @@ public class PhoneUser  {
 		this.name = name;
 	}
 
+        
+        @XmlElement(name="number")
+        @XmlElementWrapper(name="phone-numbers")        
 	public List<PhoneNumber> getPhoneNumbers() {
 		if(phoneNumbers == null)
 			this.phoneNumbers = new ArrayList<PhoneNumber>();

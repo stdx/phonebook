@@ -37,7 +37,7 @@ public class UsersResourceImplTest extends BaseResourceTest {
 		usersResource = new PhonebookResourceImpl();
 		usersResource.setPhoneService(phoneService);
 	}
-	
+	/*
 	@Test
 	public void createSingleNewUserWorks() throws IllegalArgumentException, UriBuilderException, URISyntaxException, MalformedURLException {
 		
@@ -79,6 +79,6 @@ public class UsersResourceImplTest extends BaseResourceTest {
 		
 		assertThat(fetchUserResponse.getStatus(), is(Status.NOT_FOUND.getStatusCode()));
 	}
-
+*/
 
 }
