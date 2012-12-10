@@ -1,7 +1,11 @@
 package edu.htwm.vsp.phone.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,7 +17,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlValue;
 
 /**
  * 
@@ -26,11 +29,6 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlRootElement(name = "user")
 public class PhoneUser  {
 	
-	@Override
-	public String toString() {
-		return "PhoneUser [id=" + id + ", name=" + name + ", phoneNumbers="
-				+ phoneNumbers + "]";
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,7 +37,7 @@ public class PhoneUser  {
 	private String name;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	private List<PhoneNumber> phoneNumbers;
+	private Map<String, PhoneNumber> phoneNumbers;
 	
 	public PhoneUser() {
 		this("INVALID_USER");
@@ -47,7 +45,16 @@ public class PhoneUser  {
 	
 	public PhoneUser(String name) {
 		this.name = name;
-		phoneNumbers = new ArrayList<PhoneNumber>();
+		this.phoneNumbers = new HashMap<String, PhoneNumber>();
+	}
+	
+	public PhoneUser(PhoneUser phoneUser) {
+		this(phoneUser.getName());
+		
+		// clone remaining properties
+		this.setId(phoneUser.getId());
+		for(PhoneNumber otherNumber : phoneUser.getPhoneNumbers())
+			this.phoneNumbers.put(otherNumber.getCaption(), new PhoneNumber(otherNumber));
 	}
 
 	@XmlAttribute
@@ -68,22 +75,23 @@ public class PhoneUser  {
 	}
 
         
-        @XmlElement(name="number")
-        @XmlElementWrapper(name="phone-numbers")        
+	@XmlElement(name = "number")
+	@XmlElementWrapper(name = "phone-numbers")
 	public List<PhoneNumber> getPhoneNumbers() {
-		if(phoneNumbers == null)
-			this.phoneNumbers = new ArrayList<PhoneNumber>();
-		return phoneNumbers;
+		return Collections.unmodifiableList(new ArrayList<PhoneNumber>(phoneNumbers.values()));
+	}
+	
+	void setNumbers(Collection<PhoneNumber> phoneNumbers) {
+		for(PhoneNumber newNumber : phoneNumbers) {
+			this.phoneNumbers.put(newNumber.getCaption(), newNumber);
+		}
 	}
 
-	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
-		this.phoneNumbers = phoneNumbers;
-	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = super.hashCode();
+		int result = 1;
 		result = prime * result + id;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
@@ -95,7 +103,7 @@ public class PhoneUser  {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
+		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
@@ -115,9 +123,14 @@ public class PhoneUser  {
 		return true;
 	}
 
+	public void setNumber(String caption, String number) {
+		this.phoneNumbers.put(caption, new PhoneNumber(caption, number));
+	}
+	
+	@Override
+	public String toString() {
+		return "PhoneUser [id=" + id + ", name=" + name + ", phoneNumbers=" + phoneNumbers + "]";
+	}
 
-	
-	
-	
 	
 }

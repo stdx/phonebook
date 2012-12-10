@@ -24,11 +24,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- *
- * @author adopleb
- *
  * Testet, ob die JAXB-Annotationen korrekt gesetzt sind und das das XML-Mapping
  * fehlerfrei funktioniert
+ * 
+ * @author adopleb
+ * 
  */
 public class XmlMappingTest extends BaseTest {
 

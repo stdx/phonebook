@@ -2,11 +2,7 @@ package edu.htwm.vsp.phone.service;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * 
@@ -24,15 +20,17 @@ public class PhoneNumber  {
 	private String caption;
 	private String number;
 	
-	
 
 	protected PhoneNumber() {
 	}
 
 	public PhoneNumber(String caption, String number) {
-		
 		this.caption = caption;
 		this.number = number;
+	}
+
+	public PhoneNumber(PhoneNumber phoneNumber) {
+		this(phoneNumber.getCaption(), phoneNumber.getNumber());
 	}
 
 	public String getNumber() {
@@ -51,10 +49,17 @@ public class PhoneNumber  {
 		this.caption = caption;
 	}
 
+	
+	
+	@Override
+	public String toString() {
+		return "PhoneNumber [caption=" + caption + ", number=" + number + "]";
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = super.hashCode();
+		int result = 1;
 		result = prime * result + ((caption == null) ? 0 : caption.hashCode());
 		result = prime * result + ((number == null) ? 0 : number.hashCode());
 		return result;
@@ -64,7 +69,7 @@ public class PhoneNumber  {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
+		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
