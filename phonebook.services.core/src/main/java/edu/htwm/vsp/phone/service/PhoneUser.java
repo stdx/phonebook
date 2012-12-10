@@ -1,11 +1,8 @@
 package edu.htwm.vsp.phone.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -29,7 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "user")
 public class PhoneUser  {
 	
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
@@ -37,7 +33,7 @@ public class PhoneUser  {
 	private String name;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	private Map<String, PhoneNumber> phoneNumbers;
+	private Set<PhoneNumber> phoneNumbers;
 	
 	public PhoneUser() {
 		this("INVALID_USER");
@@ -45,7 +41,7 @@ public class PhoneUser  {
 	
 	public PhoneUser(String name) {
 		this.name = name;
-		this.phoneNumbers = new HashMap<String, PhoneNumber>();
+		this.phoneNumbers = new HashSet<PhoneNumber>();
 	}
 	
 	public PhoneUser(PhoneUser phoneUser) {
@@ -54,7 +50,7 @@ public class PhoneUser  {
 		// clone remaining properties
 		this.setId(phoneUser.getId());
 		for(PhoneNumber otherNumber : phoneUser.getPhoneNumbers())
-			this.phoneNumbers.put(otherNumber.getCaption(), new PhoneNumber(otherNumber));
+			this.phoneNumbers.add(new PhoneNumber(otherNumber));
 	}
 
 	@XmlAttribute
@@ -77,13 +73,13 @@ public class PhoneUser  {
         
 	@XmlElement(name = "number")
 	@XmlElementWrapper(name = "phone-numbers")
-	public List<PhoneNumber> getPhoneNumbers() {
-		return Collections.unmodifiableList(new ArrayList<PhoneNumber>(phoneNumbers.values()));
+	public Collection<PhoneNumber> getPhoneNumbers() {
+		return phoneNumbers;
 	}
 	
-	void setNumbers(Collection<PhoneNumber> phoneNumbers) {
+	public void setNumbers(Collection<PhoneNumber> phoneNumbers) {
 		for(PhoneNumber newNumber : phoneNumbers) {
-			this.phoneNumbers.put(newNumber.getCaption(), newNumber);
+			this.phoneNumbers.add(newNumber);
 		}
 	}
 
@@ -124,7 +120,7 @@ public class PhoneUser  {
 	}
 
 	public void setNumber(String caption, String number) {
-		this.phoneNumbers.put(caption, new PhoneNumber(caption, number));
+		this.phoneNumbers.add(new PhoneNumber(caption, number));
 	}
 	
 	@Override
