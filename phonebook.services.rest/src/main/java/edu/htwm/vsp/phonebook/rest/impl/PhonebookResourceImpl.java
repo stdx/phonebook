@@ -86,7 +86,7 @@ public class PhonebookResourceImpl implements PhonebookResource {
         UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
         URI created = absolutePathBuilder.path(PhonebookResource.class, "getUser").build();
 
-        return Response.created(created).entity(userById).build();
+        return Response.created(created).build();
 
     }
 
@@ -101,6 +101,26 @@ public class PhonebookResourceImpl implements PhonebookResource {
 
         phoneService.deleteUser(userById.getId());
 
-        return Response.ok("Delete User with id: " + userID).entity(userById).build();
+        return Response.ok("user deleted").build();
+    }
+
+    @Override
+    public Response deleteNumber(int userID, String caption) {
+        PhoneUser userById = phoneService.findUserById(userID);
+
+        // Falls der User nicht existiert -> breche ab mit Fehler-Code 404
+        if (userById == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        
+        // Falls der User die Nummer mit der Caption nicht enthält -> Fehler 404
+        if(! userById.containsNumberWithCaption(caption)){
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        
+        
+        userById.deleteNumber(caption);
+
+        return Response.ok("number deleted").entity(userById).build();
     }
 }

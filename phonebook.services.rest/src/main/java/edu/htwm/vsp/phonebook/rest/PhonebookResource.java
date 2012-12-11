@@ -20,6 +20,7 @@ import javax.ws.rs.PathParam;
 public interface PhonebookResource {
 
     public static final String USER_ID_PARAM = "id";
+    public static final String PHONE_CAPTION = "caption";
 
     /**
      * Creates a new {@link PhoneUser} with the given name.
@@ -59,13 +60,18 @@ public interface PhonebookResource {
             @FormParam("caption") String caption,
             @FormParam("number") String number);
 
+    @DELETE
+    @Path("{" + USER_ID_PARAM + "} / numbers / " + "{" + PHONE_CAPTION + "}")
+    Response deleteNumber(
+            @PathParam(USER_ID_PARAM) int userID,
+            @PathParam(PHONE_CAPTION) String caption);
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response listUsers();
 
     @DELETE
     @Path("{" + USER_ID_PARAM + "}")
-    @Produces(MediaType.TEXT_PLAIN)
     Response deleteUser(
             @PathParam(USER_ID_PARAM) int userID);
 }
