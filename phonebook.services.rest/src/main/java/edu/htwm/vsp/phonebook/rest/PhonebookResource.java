@@ -12,46 +12,60 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import edu.htwm.vsp.phone.service.PhoneUser;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 
 @Path("users")
 public interface PhonebookResource {
 
-	public static final String USER_ID_PARAM = "id";
-	
-	/**
-	 * Creates a new {@link PhoneUser} with the given name.
-	 * 
-	 * @param uriInfo
-	 *            Injected by JAX-RS. Used for building the correct path to the
-	 *            newly created resource.
-	 * @param name
-	 *            The name of the user to create.
-	 * 
-	 * @return 201 CREATED and the path for accessing the new user, an
-	 *         appropriate status code otherwise.
-	 */
-	@POST
-	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-	Response createUser(
-		@Context UriInfo uriInfo,
-		@FormParam("name") String name);
-	
-	/**
-	 * Fetches an existing user by its id.
-	 * 
-	 * @param userID
-	 *            The id of the user to fetch.
-	 * @return 200 - and the found user if one exists, an appropriate HTTP status
-	 *         code else.
-	 */
-	@GET
-	@Path("{" + USER_ID_PARAM + "}")
-	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-	Response getUser(
-		@QueryParam(USER_ID_PARAM) int userID);
-	
-	@GET
-	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-	Response listUsers();
-	
+    public static final String USER_ID_PARAM = "id";
+
+    /**
+     * Creates a new {@link PhoneUser} with the given name.
+     *
+     * @param uriInfo Injected by JAX-RS. Used for building the correct path to
+     * the newly created resource.
+     * @param name The name of the user to create.
+     *
+     * @return 201 CREATED and the path for accessing the new user, an
+     * appropriate status code otherwise.
+     */
+    @POST
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    Response createUser(
+            @Context UriInfo uriInfo,
+            @FormParam("name") String name);
+
+    /**
+     * Fetches an existing user by its id.
+     *
+     * @param userID The id of the user to fetch.
+     * @return 200 - and the found user if one exists, an appropriate HTTP
+     * status code else.
+     */
+    @GET
+    @Path("{" + USER_ID_PARAM + "}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    Response getUser(
+            @PathParam(USER_ID_PARAM) int userID);
+
+    @POST
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("{" + USER_ID_PARAM + "}")
+    Response addNumber(
+            @Context UriInfo uriInfo,
+            @PathParam(USER_ID_PARAM) int userID,
+            @FormParam("caption") String caption,
+            @FormParam("number") String number);
+
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    Response listUsers();
+
+    @DELETE
+    @Path("{" + USER_ID_PARAM + "}")
+    @Produces(MediaType.TEXT_PLAIN)
+    Response deleteUser(
+            @PathParam(USER_ID_PARAM) int userID);
 }

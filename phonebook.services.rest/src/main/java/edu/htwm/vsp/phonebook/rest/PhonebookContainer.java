@@ -1,4 +1,4 @@
-package edu.htwm.vsp.phonebook.rest.impl;
+package edu.htwm.vsp.phonebook.rest;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -8,6 +8,7 @@ import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 
 import edu.htwm.vsp.phone.bind.PhoneModule;
+import edu.htwm.vsp.phonebook.rest.impl.PhonebookResourceImpl;
 
 /**
  * 

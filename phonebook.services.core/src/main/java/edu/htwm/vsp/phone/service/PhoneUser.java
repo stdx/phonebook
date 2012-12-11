@@ -62,6 +62,7 @@ public class PhoneUser  {
 		this.id = id;
 	}
 	
+        @XmlElement
 	public String getName() {
 		return name;
 	}
