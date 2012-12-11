@@ -44,34 +44,7 @@ public interface PhonebookResource {
      * @param userID The id of the user to fetch.
      * @return 200 - and the found user if one exists, an appropriate HTTP
      * status code else.
-     */
-    @GET
-    @Path("{" + USER_ID_PARAM + "}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    Response getUser(
-            @PathParam(USER_ID_PARAM) int userID);
-
-    @POST
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("{" + USER_ID_PARAM + "}")
-    Response addNumber(
-            @Context UriInfo uriInfo,
-            @PathParam(USER_ID_PARAM) int userID,
-            @FormParam("caption") String caption,
-            @FormParam("number") String number);
-
-    @DELETE
-    @Path("{" + USER_ID_PARAM + "} / numbers / " + "{" + PHONE_CAPTION + "}")
-    Response deleteNumber(
-            @PathParam(USER_ID_PARAM) int userID,
-            @PathParam(PHONE_CAPTION) String caption);
-
-    @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    Response listUsers();
-
-    @DELETE
-    @Path("{" + USER_ID_PARAM + "}")
-    Response deleteUser(
-            @PathParam(USER_ID_PARAM) int userID);
+     */    
+    Response getUser();
+    
 }

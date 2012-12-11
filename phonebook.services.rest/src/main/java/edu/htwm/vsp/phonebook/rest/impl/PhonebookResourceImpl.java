@@ -20,21 +20,6 @@ public class PhonebookResourceImpl implements PhonebookResource {
     private PhonebookService phoneService;
 
     @Override
-    public Response listUsers() {
-
-        List<PhoneUser> allUsersFromDB = getPhoneService().fetchAllUsers();
-        List<PhoneUser> allUsers = new LinkedList<PhoneUser>(allUsersFromDB);
-        Response r = null;
-        if (allUsers == null || allUsers.isEmpty()) {
-            r = Response.noContent().build();
-        } else {
-            r = Response.ok(allUsers).build();
-        }
-
-        return r;
-    }
-
-    @Override
     public Response createUser(UriInfo uriInfo, String name) {
 
         PhoneUser newUser = getPhoneService().createUser(name);
@@ -67,60 +52,5 @@ public class PhonebookResourceImpl implements PhonebookResource {
 
     public void setPhoneService(PhonebookService phoneService) {
         this.phoneService = phoneService;
-    }
-
-    @Override
-    public Response addNumber(UriInfo uriInfo, int userID, String caption, String number) {
-
-        PhoneUser userById = phoneService.findUserById(userID);
-
-        // Falls der User nicht existiert -> breche ab mit Fehler-Code 404
-        if (userById == null) {
-            return Response.status(Status.NOT_FOUND).build();
-        }
-
-        // setze Telefonnummer
-        userById.setNumber(caption, number);
-
-
-        UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
-        URI created = absolutePathBuilder.path(PhonebookResource.class, "getUser").build();
-
-        return Response.created(created).build();
-
-    }
-
-    @Override
-    public Response deleteUser(int userID) {
-        PhoneUser userById = phoneService.findUserById(userID);
-
-        // Falls der User nicht existiert -> breche ab mit Fehler-Code 404
-        if (userById == null) {
-            return Response.status(Status.NOT_FOUND).build();
-        }
-
-        phoneService.deleteUser(userById.getId());
-
-        return Response.ok("user deleted").build();
-    }
-
-    @Override
-    public Response deleteNumber(int userID, String caption) {
-        PhoneUser userById = phoneService.findUserById(userID);
-
-        // Falls der User nicht existiert -> breche ab mit Fehler-Code 404
-        if (userById == null) {
-            return Response.status(Status.NOT_FOUND).build();
-        }
-        
-        // Falls der User die Nummer mit der Caption nicht enthält -> Fehler 404
-        if(! userById.containsNumberWithCaption(caption)){
-            return Response.status(Status.NOT_FOUND).build();
-        }
-        
-        
-        userById.deleteNumber(caption);
-
-        return Response.ok("number deleted").entity(userById).build();
     }
 }

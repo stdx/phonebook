@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 @Entity
-@XmlRootElement(name = "user")
+@XmlRootElement(name = "elefant")
 public class PhoneUser {
 
     @Id
@@ -53,7 +53,7 @@ public class PhoneUser {
         }
     }
 
-    @XmlAttribute
+    
     public int getId() {
         return id;
     }
@@ -71,8 +71,8 @@ public class PhoneUser {
         this.name = name;
     }
 
-    @XmlElement(name = "number")
-    @XmlElementWrapper(name = "phone-numbers")
+    
+    @XmlElementWrapper(name = "numbers")
     public Collection<PhoneNumber> getPhoneNumbers() {
         return phoneNumbers;
     }
