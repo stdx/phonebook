@@ -16,9 +16,8 @@
 			<param-name>com.sun.jersey.config.property.MediaTypeMappings</param-name>
 			<param-value>html : text/html, xml : application/xml, json : application/json</param-value>
 		</init-param>
-                <load-on-startup>1</load-on-startup>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
-
 
 	<servlet-mapping>
 		<servlet-name>jaxrs</servlet-name>
