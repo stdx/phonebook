@@ -1,4 +1,4 @@
-package edu.htwm.vsp.phonebook.rest;
+package edu.htwm.vsp.phonebook.rest.bind;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

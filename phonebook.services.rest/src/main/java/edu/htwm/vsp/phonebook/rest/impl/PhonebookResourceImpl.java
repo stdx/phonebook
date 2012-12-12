@@ -1,18 +1,18 @@
 package edu.htwm.vsp.phonebook.rest.impl;
 
-import com.google.inject.Inject;
-import com.google.inject.servlet.RequestScoped;
-import edu.htwm.vsp.phone.service.PhoneNumber;
+import java.net.URI;
+import java.util.List;
+
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+
 import edu.htwm.vsp.phone.service.PhoneUser;
 import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phonebook.rest.PhonebookResource;
-
-import java.net.URI;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.Status;
 
 public class PhonebookResourceImpl implements PhonebookResource {
 
@@ -23,12 +23,14 @@ public class PhonebookResourceImpl implements PhonebookResource {
     public Response listUsers() {
 
         List<PhoneUser> allUsersFromDB = getPhoneService().fetchAllUsers();
-        List<PhoneUser> allUsers = new LinkedList<PhoneUser>(allUsersFromDB);
         Response r = null;
-        if (allUsers == null || allUsers.isEmpty()) {
+        
+        if (allUsersFromDB == null || allUsersFromDB.isEmpty()) {
             r = Response.noContent().build();
         } else {
-            r = Response.ok(allUsers).build();
+        	GenericEntity<List<PhoneUser>> usersToReturn = new GenericEntity<List<PhoneUser>>(allUsersFromDB){};
+            
+        	r = Response.ok(usersToReturn).build();
         }
 
         return r;
@@ -38,8 +40,6 @@ public class PhonebookResourceImpl implements PhonebookResource {
     public Response createUser(UriInfo uriInfo, String name) {
 
         PhoneUser newUser = getPhoneService().createUser(name);
-
-
 
         UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
         URI created = absolutePathBuilder.path(PhonebookResource.class, "getUser").build(newUser.getId());
