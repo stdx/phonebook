@@ -51,27 +51,55 @@ public interface PhonebookResource {
     Response getUser(
             @PathParam(USER_ID_PARAM) int userID);
 
-    @POST
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("{" + USER_ID_PARAM + "}")
+    /**
+     * Methode fügt eine Telefonnummer zu einem User hinzu. Dazu erhält sie als
+     * Parameter caption und number.
+     *
+     * Aufruf: POST: http://localhost:8080/users/{user_id} - Soll XML oder JSON
+     * zurückliefern - erhält Caption und Number als Form-Parameter - userID
+     * soll als Path-Parameter übergeben werden
+     *
+     * @return
+     */
     Response addNumber(
             @Context UriInfo uriInfo,
-            @PathParam(USER_ID_PARAM) int userID,
-            @FormParam("caption") String caption,
-            @FormParam("number") String number);
+            int userID,
+            String caption,
+            String number);
 
-    @DELETE
-    @Path("{" + USER_ID_PARAM + "}" +"/numbers/" + "{" + PHONE_CAPTION + "}")
+    /**
+     * Methode löscht eine Telefonnummer eines Users und erhält dazu die
+     * captions
+     *
+     * Aufruf: DELETE: http://localhost:8080/users/{user_id}/numbers/{caption}
+     *
+     * - erhält Caption und userID als Path-Parameter -
+     *
+     * @return
+     */
     Response deleteNumber(
-            @PathParam(USER_ID_PARAM) int userID,
-            @PathParam(PHONE_CAPTION) String caption);
+            int userID,
+            String caption);
 
-    @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    /**
+     * Methode liefert eine Liste aller PhoneUser zurück
+     *
+     * Aufruf: GET: http://localhost:8080/users - Soll XML oder JSON
+     * zurückliefern
+     *
+     * @return
+     */
     Response listUsers();
 
-    @DELETE
-    @Path("{" + USER_ID_PARAM + "}")
+    /**
+     * Methode löscht einen vorhandenen User
+     *
+     * Aufruf: DELETE: http://localhost:8080/users/{user_id}/
+     *
+     * - erhält userID als Path-Parameter -
+     *
+     * @return
+     */
     Response deleteUser(
-            @PathParam(USER_ID_PARAM) int userID);
+            int userID);
 }
