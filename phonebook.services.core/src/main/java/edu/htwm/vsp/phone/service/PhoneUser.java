@@ -53,7 +53,7 @@ public class PhoneUser {
         }
     }
 
-    @XmlAttribute
+    @XmlElement
     public int getId() {
         return id;
     }

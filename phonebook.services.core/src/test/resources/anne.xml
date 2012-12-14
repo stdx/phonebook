@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<user id="1">
+<user>
     <name>anne</name>
+    <id>1</id>
     <phone-numbers>
+        
         <number>
             <caption>festnetz</caption>
             <number>03727-12345678</number>
