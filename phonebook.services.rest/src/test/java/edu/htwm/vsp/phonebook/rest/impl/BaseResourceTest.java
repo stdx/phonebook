@@ -11,13 +11,15 @@ import edu.htwm.vsp.phone.bind.PhoneModule;
 import edu.htwm.vsp.phone.service.PhonebookService;
 
 public abstract class BaseResourceTest {
-
+ 
+        
 	PhonebookService phoneService;
 	PersistService persistService;
 
 	@Before
 	public void buildService() {
-		Injector injector = Guice.createInjector(PhoneModule.buildForTest());
+		
+            Injector injector = Guice.createInjector(PhoneModule.buildForTest());
 		
 		persistService = injector.getInstance(PersistService.class);
 		persistService.start();

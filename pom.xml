@@ -36,6 +36,7 @@
 	<modules>
 		<module>phonebook.services.core</module>
 		<module>phonebook.services.rest</module>
+        <!--        <module>phonebook.services.rest.client</module> -->
 	</modules>
 
 	<!-- Mit dependencies werden Abhaengigkeiten bestimmt. Abhengigkeiten sind 
