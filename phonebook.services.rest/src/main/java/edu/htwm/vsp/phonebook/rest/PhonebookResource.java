@@ -68,10 +68,12 @@ public interface PhonebookResource {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    Response listUsers();
+    Response listUsers(
+		@Context UriInfo uriInfo);
 
     @DELETE
     @Path("{" + USER_ID_PARAM + "}")
     Response deleteUser(
             @PathParam(USER_ID_PARAM) int userID);
+
 }

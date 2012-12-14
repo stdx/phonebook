@@ -22,9 +22,4 @@ public class UserRefList extends ArrayList<UserRef>{
 		super(initialCapacity);
 	}
 	
-	public static UserRefList fromPhoneUsers() {
-		return null;
-	}
-	
-	
 }
