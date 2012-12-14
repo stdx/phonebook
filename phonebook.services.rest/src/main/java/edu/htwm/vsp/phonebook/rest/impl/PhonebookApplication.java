@@ -1,4 +1,4 @@
-package edu.htwm.vsp.phonebook.rest;
+package edu.htwm.vsp.phonebook.rest.impl;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +10,6 @@ import com.sun.jersey.spi.inject.SingletonTypeInjectableProvider;
 
 import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phone.service.inmemory.PhoneServiceInMemory;
-import edu.htwm.vsp.phonebook.rest.impl.PhonebookResourceImpl;
 
 /**
  * 
