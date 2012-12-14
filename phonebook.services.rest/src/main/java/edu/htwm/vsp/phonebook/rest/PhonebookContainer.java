@@ -11,35 +11,34 @@ import edu.htwm.vsp.phone.bind.PhoneModule;
 import edu.htwm.vsp.phonebook.rest.impl.PhonebookResourceImpl;
 
 /**
- * 
+ *
  * Assembles the DI-configuration for Phonebook.
- * 
+ *
  * @author std
- * 
+ *
  */
 public class PhonebookContainer extends GuiceServletContextListener {
 
-	@Override
-	protected Injector getInjector() {
-		return Guice.createInjector(new JerseyServletModule() {
-			@Override
-			protected void configureServlets() {
-				
-				/*
-				 *  install the persistence modules
-				 */
-				install(PhoneModule.build());
-				
-				filter("/*").through(PersistFilter.class);
-				
-				// bind JAX-RS resources
-				bind(PhonebookResourceImpl.class);
-				
-				bind(GuiceContainer.class);
-				
-				serve("/*").with(GuiceContainer.class);
-			}
-		});
-	}
+    @Override
+    protected Injector getInjector() {
+        return Guice.createInjector(new JerseyServletModule() {
+            @Override
+            protected void configureServlets() {
 
+                /*
+                 *  install the persistence modules
+                 */
+                install(PhoneModule.build());
+
+                filter("/*").through(PersistFilter.class);
+
+                // bind JAX-RS resources
+                bind(PhonebookResourceImpl.class);
+
+                bind(GuiceContainer.class);
+
+                serve("/*").with(GuiceContainer.class);
+            }
+        });
+    }
 }

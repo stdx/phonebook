@@ -50,33 +50,31 @@ public class PhoneNumberTests extends BaseTest {
 
         String phoneNumberCaption = RandomStringUtils.randomAlphanumeric(10);
         String phoneNumber = RandomStringUtils.randomAlphanumeric(8);
-        
+
         PhoneUser user = createRandomUser(phoneService);
         user.setNumber(phoneNumberCaption, phoneNumber);
-        
+
         assertThat(user.containsNumberWithCaption(phoneNumberCaption), is(true));
-        
+
         user.deleteNumber(phoneNumberCaption);
-        
+
         assertThat(user.containsNumberWithCaption(phoneNumberCaption), is(false));
-        
+
     }
 
     @Test
     public void checkForNumberWithNumber() {
-        
+
         String phoneNumberCaption = RandomStringUtils.randomAlphanumeric(10);
         String phoneNumber = RandomStringUtils.randomAlphanumeric(8);
-        
+
         PhoneUser user = createRandomUser(phoneService);
         user.setNumber(phoneNumberCaption, phoneNumber);
-        
+
         assertThat(user.containsNumberWithNumber(phoneNumber), is(true));
-        
+
         user.deleteAllNumbers();
-        
+
         assertThat(user.containsNumberWithNumber(phoneNumber), is(false));
     }
 }
-    
-    

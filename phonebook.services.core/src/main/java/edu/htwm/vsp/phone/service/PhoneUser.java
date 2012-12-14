@@ -153,22 +153,19 @@ public class PhoneUser {
             }
         }
         return false;
-    }    
-    
-    
-        public void deleteAllNumbers()
-        {
-            this.phoneNumbers.clear();
-        }
-        
-        public void deleteNumber(String caption)
-        {
-            for (PhoneNumber num : phoneNumbers) {
+    }
+
+    public void deleteAllNumbers() {
+        this.phoneNumbers.clear();
+    }
+
+    public void deleteNumber(String caption) {
+        for (PhoneNumber num : phoneNumbers) {
             if (num.getCaption().equals(caption)) {
-               phoneNumbers.remove(num);
-               break;
+                phoneNumbers.remove(num);
+                break;
             }
         }
-        
-        }
+
+    }
 }

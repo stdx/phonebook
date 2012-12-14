@@ -61,7 +61,7 @@ public interface PhonebookResource {
             @FormParam("number") String number);
 
     @DELETE
-    @Path("{" + USER_ID_PARAM + "} / numbers / " + "{" + PHONE_CAPTION + "}")
+    @Path("{" + USER_ID_PARAM + "}" +"/numbers/" + "{" + PHONE_CAPTION + "}")
     Response deleteNumber(
             @PathParam(USER_ID_PARAM) int userID,
             @PathParam(PHONE_CAPTION) String caption);
