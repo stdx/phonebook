@@ -46,5 +46,11 @@ public interface PhonebookService {
 	 *            The id of the {@link PhoneUser} to delete.
 	 */
 	void deleteUser(int userID);
+        
+        /**
+         * Deletes all existing Users
+         * @return 
+         */
+        void deleteAllUsers();
 
 }

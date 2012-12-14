@@ -1,16 +1,11 @@
 package edu.htwm.vsp.phonebook.rest.impl;
 
-import com.google.inject.Inject;
-import com.google.inject.servlet.RequestScoped;
-import edu.htwm.vsp.phone.service.PhoneNumber;
 import edu.htwm.vsp.phone.service.PhoneUser;
 import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phonebook.rest.PhonebookResource;
-
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 
@@ -86,7 +81,7 @@ public class PhonebookResourceImpl implements PhonebookResource {
         UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
         URI created = absolutePathBuilder.path(PhonebookResource.class, "getUser").build();
 
-        return Response.created(created).build();
+        return Response.created(created).entity(userById).build();
 
     }
 
@@ -101,7 +96,7 @@ public class PhonebookResourceImpl implements PhonebookResource {
 
         phoneService.deleteUser(userById.getId());
 
-        return Response.ok("user deleted").build();
+        return Response.ok().build();
     }
 
     @Override
@@ -112,13 +107,13 @@ public class PhonebookResourceImpl implements PhonebookResource {
         if (userById == null) {
             return Response.status(Status.NOT_FOUND).build();
         }
-        
+
         // Falls der User die Nummer mit der Caption nicht enthält -> Fehler 404
-        if(! userById.containsNumberWithCaption(caption)){
+        if (!userById.containsNumberWithCaption(caption)) {
             return Response.status(Status.NOT_FOUND).build();
         }
-        
-        
+
+
         userById.deleteNumber(caption);
 
         return Response.ok("number deleted").entity(userById).build();
