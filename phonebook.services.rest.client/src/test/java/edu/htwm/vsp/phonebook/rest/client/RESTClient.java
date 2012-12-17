@@ -16,6 +16,8 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
+import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -136,14 +138,13 @@ public abstract class RESTClient {
         System.out.println("Add PhoneNumber: caption: " + phoneCaption + ", number: "
                 + phoneNumber + " for PhoneUser: " + userID + " ... \n");
 
+        
         HttpClient client = new HttpClient();
-        // -- build HTTP POST request
-        PostMethod method = new PostMethod(getServiceBaseURI() + "/users" + "/" + userID);
+        // -- build HTTP PUT request
+        // escapt phoneNumber, da QueryParam
+        PutMethod method = new PutMethod(getServiceBaseURI() + "/users" + "/" + userID + "/numbers/"
+                + phoneCaption + "?number=" + escapeHtml(phoneNumber));
 
-
-        // Form-Parameter hinzufügen
-        method.addParameter("caption", phoneCaption);
-        method.addParameter("number", phoneNumber);
 
         // -- determine the mime type you wish to receive here 
         method.setRequestHeader("Accept", contentType);

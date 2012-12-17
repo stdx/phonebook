@@ -68,6 +68,7 @@ public class HttpComponentsClient extends RESTClient {
         assertThat(fetchedUser.getPhoneNumbers().contains(newNumber), is(true));
         assertEquals(user.getPhoneNumbers(), fetchedUser.getPhoneNumbers());
 
+
         // Diese Nummer wieder löschen
         verifyDeleteNumber(userId, phoneCaption, HTTP_OK, xml);
         // ein weiteres Löschen sollte fehlschlagen

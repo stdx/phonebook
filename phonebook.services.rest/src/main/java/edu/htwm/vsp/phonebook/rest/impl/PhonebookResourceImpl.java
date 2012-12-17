@@ -25,24 +25,7 @@ public class PhonebookResourceImpl implements PhonebookResource {
     @Context
     private PhonebookService phoneService;
 
-    @Override
-    public Response listUsers(UriInfo uriInfo) {
-
-        List<PhoneUser> allUsersFromDB = getPhoneService().fetchAllUsers();
-
-        Response r = null;
-        if (allUsersFromDB == null || allUsersFromDB.isEmpty()) { // return nothing
-            r = Response.noContent().build();
-
-        } else { // return the links to the known users
-            List<UserRef> userRefs = toRefs(uriInfo, allUsersFromDB);
-            GenericEntity<List<UserRef>> usersToReturn = new GenericEntity<List<UserRef>>(userRefs) {
-            };
-            r = Response.ok(usersToReturn).build();
-        }
-
-        return r;
-    }
+   
 
     private List<UserRef> toRefs(UriInfo uriInfo, List<PhoneUser> allUsersFromDB) {
         UserRefList userRefList = new UserRefList(allUsersFromDB.size());

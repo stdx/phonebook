@@ -145,60 +145,6 @@ public class PhonebookResourceImplTest {
     }
 
     /**
-     * Testet, dass alle Nutzer ausgegeben werden können Wir bekommen als
-     * Antwort eine Instanz GenericEntity
-     */
-    @Test
-    public void testFetchAllUsers() {
-
-        /* erzeuge zufälligen Nutzer */
-        PhoneUser randomUser = phoneService.createUser(RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(10) + 1));
-
-        Response fetchUserResponse = phonebookResource.listUsers(uriInfo);
-
-
-        assertThat(fetchUserResponse.getStatus(), is(Status.OK.getStatusCode()));
-
-        GenericEntity<List<UserRef>> entitiy = (GenericEntity<List<UserRef>>) fetchUserResponse.getEntity();
-        UserRefList allUsers = (UserRefList) entitiy.getEntity();
-
-        // Prüfe, dass Liste nicht leer ist
-        assertThat(allUsers.isEmpty(), is(false));
-
-        // Prüfe, dass neuer User in Liste enthalten ist
-        // Dazu iteriere durch die List, und prüfe IDs von jeden enthaltenen User
-        boolean containsUser = false;
-        for (UserRef user : allUsers) {
-
-            if (user.getId() == randomUser.getId()) {
-                containsUser = true;
-            }
-        }
-        assertThat(containsUser, is(true));
-
-        // lösche anschließend Nutzer
-        phoneService.deleteUser(randomUser.getId());
-
-    }
-
-    /**
-     * Testet, dass listUsers() 204 (no content) für eine leere List zuückgibt
-     */
-    @Test
-    public void testFetchAllUsersFromEmptyListGives204() {
-
-        // Lösche alle User und Teste dass List leer
-        phoneService.deleteAllUsers();
-        assertThat(phoneService.fetchAllUsers().isEmpty(), is(true));
-
-
-        // Prüfe, das listUsers StatusCode 204 zurückgibt
-//        Response fetchUserResponse = usersResource.listUsers();
-        //  assertThat(fetchUserResponse.getStatus(), is(Status.NO_CONTENT.getStatusCode()));
-        //   List allUsers = (List) fetchUserResponse.getEntity();
-    }
-
-    /**
      * Hilfsmethode, erzeugt einen zufälligen Nutzer
      *
      * @return

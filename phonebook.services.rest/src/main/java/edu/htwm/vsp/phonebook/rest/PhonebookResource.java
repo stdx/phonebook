@@ -55,25 +55,22 @@ public interface PhonebookResource {
             @PathParam(USER_ID_PARAM) int userID);
 
     @PUT
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("{" + USER_ID_PARAM + "}")
+    @Path("{" + USER_ID_PARAM + "}" + "/numbers/" + "{" + PHONE_CAPTION + "}")
     Response addNumber(
             @Context UriInfo uriInfo,
             @PathParam(USER_ID_PARAM) int userID,
-            @FormParam("caption") @DefaultValue("") String caption,
-            @FormParam("number") @DefaultValue("empty") String number);
+            @PathParam(PHONE_CAPTION) String caption,
+            @QueryParam("number") @DefaultValue("") String number);
 
     @DELETE
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("{" + USER_ID_PARAM + "}" +"/numbers/" + "{" + PHONE_CAPTION + "}")
+    @Path("{" + USER_ID_PARAM + "}" + "/numbers/" + "{" + PHONE_CAPTION + "}")
     Response deleteNumber(
             @PathParam(USER_ID_PARAM) int userID,
             @PathParam(PHONE_CAPTION) String caption);
 
-    @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    Response listUsers(UriInfo uriInfo);
+    
 
     @DELETE
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
