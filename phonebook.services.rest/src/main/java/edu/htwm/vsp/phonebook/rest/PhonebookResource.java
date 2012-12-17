@@ -51,9 +51,10 @@ public interface PhonebookResource {
     Response getUser(
             @PathParam(USER_ID_PARAM) int userID);
 
+    // TODO Warum kein PUT hier?
     @POST
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("{" + USER_ID_PARAM + "}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response addNumber(
             @Context UriInfo uriInfo,
             @PathParam(USER_ID_PARAM) int userID,

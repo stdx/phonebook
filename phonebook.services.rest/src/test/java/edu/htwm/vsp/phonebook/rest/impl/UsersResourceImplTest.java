@@ -1,22 +1,19 @@
 package edu.htwm.vsp.phonebook.rest.impl;
 
-import edu.htwm.vsp.phone.service.PhoneNumber;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.List;
 
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriBuilderException;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -26,18 +23,24 @@ import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import edu.htwm.vsp.phone.service.PhoneNumber;
 import edu.htwm.vsp.phone.service.PhoneUser;
+import edu.htwm.vsp.phone.service.inmemory.PhoneServiceInMemory;
 import edu.htwm.vsp.phonebook.rest.PhonebookResource;
-import java.util.List;
+import edu.htwm.vsp.phonebook.rest.UserRef;
+import edu.htwm.vsp.phonebook.rest.UserRefList;
 
-public class UsersResourceImplTest extends BaseResourceTest {
+public class UsersResourceImplTest {
 
     private PhonebookResourceImpl usersResource;
     private UriInfo uriInfo;
+	private PhoneServiceInMemory phoneService;
 
     @Before
     public void prepareResourcesToTest() {
-
+    	
+    	phoneService = new PhoneServiceInMemory();
+    	
         usersResource = new PhonebookResourceImpl();
         usersResource.setPhoneService(phoneService);
     }
@@ -62,15 +65,9 @@ public class UsersResourceImplTest extends BaseResourceTest {
      * Anschließend wird getestet, der neu angelegte auch existiert:Status-Code
      * 200 (OK) und ob der zurückgegene User identisch mit dem erzeugten ist
      *
-     * @throws IllegalArgumentException
-     * @throws UriBuilderException
-     * @throws URISyntaxException
-     * @throws MalformedURLException
      */
     @Test
-    public void createSingleNewUserWorks() throws IllegalArgumentException, UriBuilderException, URISyntaxException, MalformedURLException {
-
-
+    public void createSingleNewUserWorks() throws Exception {
 
         String expectedName = RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(10) + 1);
         Response createUserResponse = usersResource.createUser(uriInfo, expectedName);
@@ -115,14 +112,19 @@ public class UsersResourceImplTest extends BaseResourceTest {
         /* erzeuge zufälligen Nutzer */
         PhoneUser randomUser = phoneService.createUser(RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(10) + 1));
 
-        Response fetchUserResponse = usersResource.listUsers();
+        Response fetchUserResponse = usersResource.listUsers(uriInfo);
 
+        
         assertThat(fetchUserResponse.getStatus(), is(Status.OK.getStatusCode()));
-        List allUsers = (List) fetchUserResponse.getEntity();
-
+        
+        // TODO immer Generics verwenden! Warum hier nicht?
+//        List allUsers = (List) fetchUserResponse.getEntity();
+		List<UserRef> userRefs = ((GenericEntity<UserRefList>) fetchUserResponse.getEntity()).getEntity();
+        
         // Prüfe, dass Liste nicht leer ist
-        assertThat(allUsers.isEmpty(), is(false));
-
+        assertThat(userRefs.isEmpty(), is(false));
+        
+        
         // lösche anschließend Nutzer
         phoneService.deleteUser(randomUser.getId());
 
@@ -140,7 +142,7 @@ public class UsersResourceImplTest extends BaseResourceTest {
 
 
         // Prüfe, das listUsers StatusCode 204 zurückgibt
-        Response fetchUserResponse = usersResource.listUsers();
+        Response fetchUserResponse = usersResource.listUsers(uriInfo);
         assertThat(fetchUserResponse.getStatus(), is(Status.NO_CONTENT.getStatusCode()));
         List allUsers = (List) fetchUserResponse.getEntity();
     }
