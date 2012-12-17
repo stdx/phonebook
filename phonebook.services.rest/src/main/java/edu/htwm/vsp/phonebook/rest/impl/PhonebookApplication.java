@@ -8,6 +8,7 @@ import javax.ws.rs.core.Context;
 
 import com.sun.jersey.spi.inject.SingletonTypeInjectableProvider;
 
+import edu.htwm.vsp.phone.service.PhoneUser;
 import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phone.service.inmemory.PhoneServiceInMemory;
 
@@ -35,11 +36,19 @@ public class PhonebookApplication extends Application {
         };
         getSingletons().add(birthdayServiceProvider);
         
+        fillWithTestData(phonebookService);
+        
         // register the resources 
         getClasses().add(PhonebookResourceImpl.class);
     }
 
-    @Override
+    private void fillWithTestData(PhonebookService phonebookService2) {
+		PhoneUser phoneUser = phonebookService2.createUser("Gustav");
+		phoneUser.setNumber("mobile", "123123");
+		phoneUser.setNumber("Work", "+49 27234 23423");
+	}
+
+	@Override
     public Set<Class<?>> getClasses() {
         return resourcesToRegister;
     }
