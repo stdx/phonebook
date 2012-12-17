@@ -12,7 +12,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import edu.htwm.vsp.phone.service.PhoneUser;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 
@@ -32,6 +34,7 @@ public interface PhonebookResource {
      * @return 201 CREATED and the path for accessing the new user, an
      * appropriate status code otherwise.
      */
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @POST
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response createUser(
@@ -51,16 +54,18 @@ public interface PhonebookResource {
     Response getUser(
             @PathParam(USER_ID_PARAM) int userID);
 
-    @POST
+    @PUT
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("{" + USER_ID_PARAM + "}")
     Response addNumber(
             @Context UriInfo uriInfo,
             @PathParam(USER_ID_PARAM) int userID,
-            @FormParam("caption") String caption,
-            @FormParam("number") String number);
+            @FormParam("caption") @DefaultValue("") String caption,
+            @FormParam("number") @DefaultValue("empty") String number);
 
     @DELETE
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("{" + USER_ID_PARAM + "}" +"/numbers/" + "{" + PHONE_CAPTION + "}")
     Response deleteNumber(
             @PathParam(USER_ID_PARAM) int userID,
@@ -71,6 +76,7 @@ public interface PhonebookResource {
     Response listUsers(UriInfo uriInfo);
 
     @DELETE
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("{" + USER_ID_PARAM + "}")
     Response deleteUser(
             @PathParam(USER_ID_PARAM) int userID);

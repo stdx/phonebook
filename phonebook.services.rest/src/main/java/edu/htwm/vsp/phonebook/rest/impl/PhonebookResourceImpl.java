@@ -15,6 +15,10 @@ import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phonebook.rest.PhonebookResource;
 import edu.htwm.vsp.phonebook.rest.UserRef;
 import edu.htwm.vsp.phonebook.rest.UserRefList;
+import java.util.Locale;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Variant;
+import sun.security.krb5.internal.crypto.RsaMd5CksumType;
 
 public class PhonebookResourceImpl implements PhonebookResource {
 
@@ -25,40 +29,47 @@ public class PhonebookResourceImpl implements PhonebookResource {
     public Response listUsers(UriInfo uriInfo) {
 
         List<PhoneUser> allUsersFromDB = getPhoneService().fetchAllUsers();
-        
+
         Response r = null;
         if (allUsersFromDB == null || allUsersFromDB.isEmpty()) { // return nothing
             r = Response.noContent().build();
-        
+
         } else { // return the links to the known users
-        	List<UserRef> userRefs = toRefs(uriInfo, allUsersFromDB);
-        	GenericEntity<List<UserRef>> usersToReturn = new GenericEntity<List<UserRef>>(userRefs){};
-        	r = Response.ok(usersToReturn).build();
+            List<UserRef> userRefs = toRefs(uriInfo, allUsersFromDB);
+            GenericEntity<List<UserRef>> usersToReturn = new GenericEntity<List<UserRef>>(userRefs) {
+            };
+            r = Response.ok(usersToReturn).build();
         }
-        
+
         return r;
     }
 
     private List<UserRef> toRefs(UriInfo uriInfo, List<PhoneUser> allUsersFromDB) {
-    	UserRefList userRefList = new UserRefList(allUsersFromDB.size());
-    	for(PhoneUser user : allUsersFromDB)
-    		userRefList.add(UserRef.fromUser(user, toUri(uriInfo, user)));
-    	return userRefList;
-	}
+        UserRefList userRefList = new UserRefList(allUsersFromDB.size());
+        for (PhoneUser user : allUsersFromDB) {
+            userRefList.add(UserRef.fromUser(user, toUri(uriInfo, user)));
+        }
+        return userRefList;
+    }
 
-	@Override
+    @Override
     public Response createUser(UriInfo uriInfo, String name) {
+        // Falls keine Name angegeben -> Error 400 (Bad Request)
+        if (name.isEmpty()) {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
+
         PhoneUser newUser = getPhoneService().createUser(name);
-        Response createdResponse = Response.created(toUri(uriInfo, newUser)).entity(newUser).build(); 
+        Response createdResponse = Response.created(toUri(uriInfo, newUser)).entity(newUser).build();
         return createdResponse;
     }
-	
-	private URI toUri(UriInfo uriInfo, PhoneUser user) {
-		UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
+
+    private URI toUri(UriInfo uriInfo, PhoneUser user) {
+        UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
         URI userUri = absolutePathBuilder.path(PhonebookResource.class, "getUser").build(user.getId());
         return userUri;
-	}
-	
+    }
 
     @Override
     public Response getUser(int userID) {
@@ -90,6 +101,10 @@ public class PhonebookResourceImpl implements PhonebookResource {
         // Falls der User nicht existiert -> breche ab mit Fehler-Code 404
         if (userById == null) {
             return Response.status(Status.NOT_FOUND).build();
+        }
+        // Falls  caption leer -> gebe Error 400 zurück
+        if (caption.isEmpty()) {
+            return Response.status(Status.BAD_REQUEST).build();
         }
 
         // setze Telefonnummer
@@ -129,9 +144,8 @@ public class PhonebookResourceImpl implements PhonebookResource {
             return Response.status(Status.NOT_FOUND).build();
         }
 
-
         userById.deleteNumber(caption);
 
-        return Response.ok("number deleted").entity(userById).build();
+        return Response.ok().entity(userById).build();
     }
 }

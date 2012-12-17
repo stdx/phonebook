@@ -126,13 +126,46 @@ public class PhoneUser {
         return true;
     }
 
+    /**
+     * fügt Telefonnummer zu einem Nutzer hinzu. Falls bereits eine Nummer mit
+     * der übergebenen caption existiert, wird diese überschrieben
+     *
+     * @param caption Caption
+     * @param number Nummer
+     */
     public void setNumber(String caption, String number) {
-        this.phoneNumbers.add(new PhoneNumber(caption, number));
+
+        // Falls Nummer schon vorhanden --> ersetzen
+        if (containsNumberWithCaption(caption)) {
+            PhoneNumber num = getNumberWithCaption(caption);
+            num.setNumber(number);
+        } else {
+            this.phoneNumbers.add(new PhoneNumber(caption, number));
+        }
+
     }
 
     @Override
     public String toString() {
         return "PhoneUser [id=" + id + ", name=" + name + ", phoneNumbers=" + phoneNumbers + "]";
+    }
+
+    /**
+     * Holt PhoneNumber mit übergebenen caption
+     *
+     * @param caption
+     * @return PhoneNumber mit caption, null falls nicht vorhanden
+     */
+    public PhoneNumber getNumberWithCaption(String caption) {
+        if (!containsNumberWithCaption(caption)) {
+            return null;
+        }
+        for (PhoneNumber num : phoneNumbers) {
+            if (num.getCaption().equals(caption)) {
+                return num;
+            }
+        }
+        return null;
     }
 
     public boolean containsNumberWithCaption(String caption) {

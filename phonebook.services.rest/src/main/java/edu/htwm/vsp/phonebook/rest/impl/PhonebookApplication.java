@@ -12,13 +12,13 @@ import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phone.service.inmemory.PhoneServiceInMemory;
 
 /**
- * 
+ *
  * An {@link Application} is the main entry point for a JAX-RS Webservice. Most
- * implementations of {@link Application}s are delivered with JAX-RS distribution like
- * Jersey or RestEasy.
- * 
+ * implementations of {@link Application}s are delivered with JAX-RS
+ * distribution like Jersey or RestEasy.
+ *
  * @author std
- * 
+ *
  */
 public class PhonebookApplication extends Application {
 
@@ -28,13 +28,12 @@ public class PhonebookApplication extends Application {
 
     public PhonebookApplication() {
 
-    	// add the phonebook service
+        // add the phonebook service
         phonebookService = new PhoneServiceInMemory();
-        SingletonTypeInjectableProvider<Context, PhonebookService> birthdayServiceProvider = new SingletonTypeInjectableProvider<Context, PhonebookService>(
+        SingletonTypeInjectableProvider<Context, PhonebookService> phonebookServiceProvider = new SingletonTypeInjectableProvider<Context, PhonebookService>(
                 PhonebookService.class, phonebookService) {
         };
-        getSingletons().add(birthdayServiceProvider);
-        
+        getSingletons().add(phonebookServiceProvider);
         // register the resources 
         getClasses().add(PhonebookResourceImpl.class);
     }
