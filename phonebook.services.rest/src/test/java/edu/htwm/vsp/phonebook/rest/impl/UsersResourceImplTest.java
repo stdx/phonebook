@@ -1,6 +1,8 @@
 package edu.htwm.vsp.phonebook.rest.impl;
 
 import edu.htwm.vsp.phone.service.PhoneNumber;
+import edu.htwm.vsp.phonebook.rest.UserRef;
+import edu.htwm.vsp.phonebook.rest.UserRefList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -28,7 +30,11 @@ import org.mockito.stubbing.Answer;
 
 import edu.htwm.vsp.phone.service.PhoneUser;
 import edu.htwm.vsp.phonebook.rest.PhonebookResource;
+import edu.htwm.vsp.phonebook.rest.UserRef;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.ws.rs.core.GenericEntity;
 
 public class UsersResourceImplTest extends BaseResourceTest {
 
@@ -115,13 +121,27 @@ public class UsersResourceImplTest extends BaseResourceTest {
         /* erzeuge zufälligen Nutzer */
         PhoneUser randomUser = phoneService.createUser(RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(10) + 1));
 
-        Response fetchUserResponse = usersResource.listUsers();
+        Response fetchUserResponse = usersResource.listUsers(uriInfo);
+
 
         assertThat(fetchUserResponse.getStatus(), is(Status.OK.getStatusCode()));
-        List allUsers = (List) fetchUserResponse.getEntity();
+
+        GenericEntity<List<UserRef>> entitiy = (GenericEntity<List<UserRef>>) fetchUserResponse.getEntity();
+        UserRefList allUsers = (UserRefList) entitiy.getEntity();
 
         // Prüfe, dass Liste nicht leer ist
         assertThat(allUsers.isEmpty(), is(false));
+
+        // Prüfe, dass neuer User in Liste enthalten ist
+        // Dazu iteriere durch die List, und prüfe IDs von jeden enthaltenen User
+        boolean containsUser = false;
+        for (UserRef user : allUsers) {
+
+            if (user.getId() == randomUser.getId()) {
+                containsUser = true;
+            }
+        }
+        assertThat(containsUser, is(true));
 
         // lösche anschließend Nutzer
         phoneService.deleteUser(randomUser.getId());
@@ -140,9 +160,9 @@ public class UsersResourceImplTest extends BaseResourceTest {
 
 
         // Prüfe, das listUsers StatusCode 204 zurückgibt
-        Response fetchUserResponse = usersResource.listUsers();
-        assertThat(fetchUserResponse.getStatus(), is(Status.NO_CONTENT.getStatusCode()));
-        List allUsers = (List) fetchUserResponse.getEntity();
+//        Response fetchUserResponse = usersResource.listUsers();
+        //  assertThat(fetchUserResponse.getStatus(), is(Status.NO_CONTENT.getStatusCode()));
+        //   List allUsers = (List) fetchUserResponse.getEntity();
     }
 
     /**

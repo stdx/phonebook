@@ -5,6 +5,7 @@
 
     <display-name>REST Service</display-name>
 
+<<<<<<< HEAD
     <servlet>
         <servlet-name>jaxrs</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -24,6 +25,26 @@
         <servlet-name>jaxrs</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+=======
+	<servlet>
+		<servlet-name>jaxrs</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>edu.htwm.vsp.phonebook.rest.PhonebookApplication</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.MediaTypeMappings</param-name>
+			<param-value>html : text/html, xml : application/xml, json : application/json</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>jaxrs</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+>>>>>>> origin/rest_fixes
 
 </web-app>
 

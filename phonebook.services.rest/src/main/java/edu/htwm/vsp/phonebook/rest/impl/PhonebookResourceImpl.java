@@ -1,13 +1,20 @@
 package edu.htwm.vsp.phonebook.rest.impl;
 
+import java.net.URI;
+import java.util.List;
+
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+
 import edu.htwm.vsp.phone.service.PhoneUser;
 import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phonebook.rest.PhonebookResource;
-import java.net.URI;
-import java.util.LinkedList;
-import java.util.List;
-import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.Status;
+import edu.htwm.vsp.phonebook.rest.UserRef;
+import edu.htwm.vsp.phonebook.rest.UserRefList;
 
 public class PhonebookResourceImpl implements PhonebookResource {
 
@@ -15,32 +22,43 @@ public class PhonebookResourceImpl implements PhonebookResource {
     private PhonebookService phoneService;
 
     @Override
-    public Response listUsers() {
+    public Response listUsers(UriInfo uriInfo) {
 
         List<PhoneUser> allUsersFromDB = getPhoneService().fetchAllUsers();
-        List<PhoneUser> allUsers = new LinkedList<PhoneUser>(allUsersFromDB);
+        
         Response r = null;
-        if (allUsers == null || allUsers.isEmpty()) {
+        if (allUsersFromDB == null || allUsersFromDB.isEmpty()) { // return nothing
             r = Response.noContent().build();
-        } else {
-            r = Response.ok(allUsers).build();
+        
+        } else { // return the links to the known users
+        	List<UserRef> userRefs = toRefs(uriInfo, allUsersFromDB);
+        	GenericEntity<List<UserRef>> usersToReturn = new GenericEntity<List<UserRef>>(userRefs){};
+        	r = Response.ok(usersToReturn).build();
         }
-
+        
         return r;
     }
 
-    @Override
+    private List<UserRef> toRefs(UriInfo uriInfo, List<PhoneUser> allUsersFromDB) {
+    	UserRefList userRefList = new UserRefList(allUsersFromDB.size());
+    	for(PhoneUser user : allUsersFromDB)
+    		userRefList.add(UserRef.fromUser(user, toUri(uriInfo, user)));
+    	return userRefList;
+	}
+
+	@Override
     public Response createUser(UriInfo uriInfo, String name) {
-
         PhoneUser newUser = getPhoneService().createUser(name);
-
-
-
-        UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
-        URI created = absolutePathBuilder.path(PhonebookResource.class, "getUser").build(newUser.getId());
-
-        return Response.created(created).entity(newUser).build();
+        Response createdResponse = Response.created(toUri(uriInfo, newUser)).entity(newUser).build(); 
+        return createdResponse;
     }
+	
+	private URI toUri(UriInfo uriInfo, PhoneUser user) {
+		UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
+        URI userUri = absolutePathBuilder.path(PhonebookResource.class, "getUser").build(user.getId());
+        return userUri;
+	}
+	
 
     @Override
     public Response getUser(int userID) {
