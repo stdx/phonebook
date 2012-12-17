@@ -9,36 +9,34 @@ import edu.htwm.vsp.phone.service.jpa.PhonebookServiceImpl;
 
 public class PhoneModule extends AbstractModule {
 
-	private final String persistenceUnit;
-	private final Module persistModule;
+    private final String persistenceUnit;
+    private final Module persistModule;
 
-	private PhoneModule(String persistenceUnit) {
-		this.persistenceUnit = persistenceUnit;
-		persistModule = new JpaPersistModule(persistenceUnit);
-		
-	}
+    private PhoneModule(String persistenceUnit) {
+        this.persistenceUnit = persistenceUnit;
+        persistModule = new JpaPersistModule(persistenceUnit);
 
-	public Module getPersistModule() {
-		return persistModule;
-	}
+    }
 
-	public String getPersistenceUnit() {
-		return persistenceUnit;
-	}
+    public Module getPersistModule() {
+        return persistModule;
+    }
 
-	@Override
-	protected void configure() {
-		install(getPersistModule());
-		bind(PhonebookService.class).to(PhonebookServiceImpl.class);
-	}
-	
-	public static Module build() {
-		return new PhoneModule("phonebook");
-	}
-	
-	public static Module buildForTest() {
-		return new PhoneModule("phonebook-test");
-	}
-	
-	
+    public String getPersistenceUnit() {
+        return persistenceUnit;
+    }
+
+    @Override
+    protected void configure() {
+        install(getPersistModule());
+        bind(PhonebookService.class).to(PhonebookServiceImpl.class);
+    }
+
+    public static Module build() {
+        return new PhoneModule("phonebook");
+    }
+
+    public static Module buildForTest() {
+        return new PhoneModule("phonebook-test");
+    }
 }

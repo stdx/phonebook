@@ -1,10 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+        
     <parent>
         <groupId>edu.htwm.vsp</groupId>
         <artifactId>phonebook</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
+    
     <artifactId>phonebook.services.rest.client</artifactId>
 
     <properties>
@@ -13,33 +16,43 @@
 
     <dependencies>
    
+        <!--  <dependency> -->
+        <!--  <groupId>${project.groupId}</groupId> -->
+        <!-- <artifactId>phonebook.services.rest</artifactId> -->
+        <!-- <version>${project.version}</version> -->
+        <!-- <type>war</type> -->
+        <!--   </dependency> -->
 
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>phonebook.services.core</artifactId>
-            <version>${project.version}</version>
-            
+            <version>${project.version}</version>            
         </dependency>
 
         <!-- JAX-RS -->
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
-			<version>${jersey.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-			<version>${jersey.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
 
 
-		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
-		</dependency>        
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
     </dependencies>
-
-
 </project>

@@ -10,23 +10,22 @@ import edu.htwm.vsp.phone.service.inmemory.PhoneServiceInMemory;
 
 public abstract class BaseTest {
 
-	PhonebookService phoneService;
+    PhonebookService phoneService;
 
-	/**
-	 * Diese Methode wird vor Beginn jeder Testmethode aufgerufen. Dies erfolgt
-	 * durch JUnit und wird über die Annotation {@link Before} konfiguriert.
-	 */
-	@Before
-	public void buildService() {
-		phoneService = new PhoneServiceInMemory();
-	}
-	
-	
-	public PhoneUser createRandomUser(PhonebookService phoneService) {
-		return createUser(phoneService, RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(10) + 1));
-	}
-	
-	public PhoneUser createUser(PhonebookService phoneService, String userName) {
-		return phoneService.createUser(userName);
-	}
+    /**
+     * Diese Methode wird vor Beginn jeder Testmethode aufgerufen. Dies erfolgt
+     * durch JUnit und wird über die Annotation {@link Before} konfiguriert.
+     */
+    @Before
+    public void buildService() {
+        phoneService = new PhoneServiceInMemory();
+    }
+
+    public PhoneUser createRandomUser(PhonebookService phoneService) {
+        return createUser(phoneService, RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(10) + 1));
+    }
+
+    public PhoneUser createUser(PhonebookService phoneService, String userName) {
+        return phoneService.createUser(userName);
+    }
 }

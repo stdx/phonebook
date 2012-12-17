@@ -56,16 +56,16 @@ public interface PhonebookResource {
     @Path("{" + USER_ID_PARAM + "}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response addNumber(
-            @Context UriInfo uriInfo,
-            @PathParam(USER_ID_PARAM) int userID,
-            @FormParam("caption") String caption,
-            @FormParam("number") String number);
+        @Context UriInfo uriInfo,
+        @PathParam(USER_ID_PARAM) int userID,
+        @FormParam("caption") String caption,
+        @FormParam("number") String number);
 
     @DELETE
     @Path("{" + USER_ID_PARAM + "}/numbers/" + "{" + PHONE_CAPTION + "}")
     Response deleteNumber(
-            @PathParam(USER_ID_PARAM) int userID,
-            @PathParam(PHONE_CAPTION) String caption);
+        @PathParam(USER_ID_PARAM) int userID,
+        @PathParam(PHONE_CAPTION) String caption);
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

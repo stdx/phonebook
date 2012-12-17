@@ -95,12 +95,10 @@ public class PhonebookResourceImpl implements PhonebookResource {
         // setze Telefonnummer
         userById.setNumber(caption, number);
 
-
         UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
-        URI created = absolutePathBuilder.path(PhonebookResource.class, "getUser").build();
+        URI created = absolutePathBuilder.path(PhonebookResource.class, "getUser").build("");
 
         return Response.created(created).entity(userById).build();
-
     }
 
     @Override
