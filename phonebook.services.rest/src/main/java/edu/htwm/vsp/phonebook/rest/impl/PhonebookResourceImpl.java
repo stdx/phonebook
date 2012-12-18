@@ -20,12 +20,10 @@ public class PhonebookResourceImpl implements PhonebookResource {
 
     @Override
     public Response createUser(UriInfo uriInfo, String name) {
-
         // Falls keine Name angegeben -> Error 400 (Bad Request)
         if (name.isEmpty()) {
             return Response.status(Status.BAD_REQUEST).build();
         }
-
 
 
         PhoneUser newUser = getPhoneService().createUser(name);
@@ -64,55 +62,48 @@ public class PhonebookResourceImpl implements PhonebookResource {
     @Override
     public Response addNumber(UriInfo uriInfo, int userID, String caption, String number) {
 
-        // hole User
-        PhoneUser user = null;
-
-        // Falls der User nicht existiert -> gebe Fehler-Code 404 zurück
+        PhoneUser userById = phoneService.findUserById(userID);
 
         // Falls der User nicht existiert -> breche ab mit Fehler-Code 404
-        if (user == null) {
-            return Response.status(Status.NOT_FOUND).build();
-        }
-        // Falls  caption leer -> gebe Error 400 zurück
-        if (caption.isEmpty()) {
-            return Response.status(Status.BAD_REQUEST).build();
-        }
 
-        // gebe User zurück
+
+        // Falls caption leer -> gebe Error 400 zurück
+
+
+        // setze Telefonnummer
+
+
+        // Response created zurückgeben
         UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
         URI created = absolutePathBuilder.path(PhonebookResource.class, "getUser").build("");
-        return Response.created(created).entity(user).build();
+
+        return Response.created(created).entity(userById).build();
     }
 
     @Override
     public Response deleteUser(int userID) {
-        // hole User
-        PhoneUser user = null;
+        //hole User
 
-        // Falls der User nicht existiert -> gebe Fehler-Code 404 zurück
+        // Falls der User nicht existiert -> breche ab mit Fehler-Code 404
 
         // lösche User
 
-        // gebe OK zurück
         return Response.ok().build();
     }
 
     @Override
     public Response deleteNumber(int userID, String caption) {
-        // hole User
-        PhoneUser user = null;
+        //hole User
 
-        // Falls der User nicht existiert -> gebe Fehler-Code 404 zurück
+        // Falls der User nicht existiert -> breche ab mit Fehler-Code 404
+        
 
         // Falls der User die Nummer mit der Caption nicht enthält -> Fehler 404
-         
-
+        
         // lösche Nummer
 
-        // gebe OK zurück
         
-        
-        
+
         return Response.ok().entity(user).build();
     }
 }
