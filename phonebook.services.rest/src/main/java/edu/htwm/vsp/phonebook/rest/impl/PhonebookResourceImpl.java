@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
@@ -13,12 +12,6 @@ import javax.ws.rs.core.UriInfo;
 import edu.htwm.vsp.phone.service.PhoneUser;
 import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phonebook.rest.PhonebookResource;
-import edu.htwm.vsp.phonebook.rest.UserRef;
-import edu.htwm.vsp.phonebook.rest.UserRefList;
-import java.util.Locale;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Variant;
-import sun.security.krb5.internal.crypto.RsaMd5CksumType;
 
 public class PhonebookResourceImpl implements PhonebookResource {
 
@@ -26,15 +19,6 @@ public class PhonebookResourceImpl implements PhonebookResource {
     private PhonebookService phoneService;
 
    
-
-    private List<UserRef> toRefs(UriInfo uriInfo, List<PhoneUser> allUsersFromDB) {
-        UserRefList userRefList = new UserRefList(allUsersFromDB.size());
-        for (PhoneUser user : allUsersFromDB) {
-            userRefList.add(UserRef.fromUser(user, toUri(uriInfo, user)));
-        }
-        return userRefList;
-    }
-
     @Override
     public Response createUser(UriInfo uriInfo, String name) {
         // Falls keine Name angegeben -> Error 400 (Bad Request)

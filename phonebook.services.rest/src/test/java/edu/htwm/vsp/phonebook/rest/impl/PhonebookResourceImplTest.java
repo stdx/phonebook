@@ -1,12 +1,11 @@
 package edu.htwm.vsp.phonebook.rest.impl;
 
 import edu.htwm.vsp.phone.service.PhoneNumber;
-import edu.htwm.vsp.phonebook.rest.UserRef;
-import edu.htwm.vsp.phonebook.rest.UserRefList;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.equalTo;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -32,11 +31,7 @@ import edu.htwm.vsp.phone.service.PhoneUser;
 import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phone.service.inmemory.PhoneServiceInMemory;
 import edu.htwm.vsp.phonebook.rest.PhonebookResource;
-import edu.htwm.vsp.phonebook.rest.UserRef;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.ws.rs.core.GenericEntity;
 
 /**
  * Testet die Funktionalität der REST-Methoden unabhängig vom Web-Server
