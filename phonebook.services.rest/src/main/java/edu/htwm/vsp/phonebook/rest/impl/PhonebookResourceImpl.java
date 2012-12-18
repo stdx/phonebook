@@ -62,7 +62,8 @@ public class PhonebookResourceImpl implements PhonebookResource {
     @Override
     public Response addNumber(UriInfo uriInfo, int userID, String caption, String number) {
 
-        PhoneUser userById = phoneService.findUserById(userID);
+        // hule User
+        PhoneUser user = null;
 
         // Falls der User nicht existiert -> breche ab mit Fehler-Code 404
 
@@ -77,7 +78,7 @@ public class PhonebookResourceImpl implements PhonebookResource {
         UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
         URI created = absolutePathBuilder.path(PhonebookResource.class, "getUser").build("");
 
-        return Response.created(created).entity(userById).build();
+        return Response.created(created).entity(user).build();
     }
 
     @Override
