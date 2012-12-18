@@ -1,10 +1,11 @@
 package edu.htwm.vsp.phonebook.rest.impl;
 
 import edu.htwm.vsp.phone.service.PhoneNumber;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.equalTo;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -27,21 +28,40 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import edu.htwm.vsp.phone.service.PhoneUser;
+import edu.htwm.vsp.phone.service.PhonebookService;
+import edu.htwm.vsp.phone.service.inmemory.PhoneServiceInMemory;
 import edu.htwm.vsp.phonebook.rest.PhonebookResource;
-import java.util.List;
 
-public class UsersResourceImplTest extends BaseResourceTest {
 
-    private PhonebookResourceImpl usersResource;
+/**
+ * Testet die Funktionalität der REST-Methoden unabhängig vom Web-Server
+ * (Whitebox-Testing) Das Controller-Objekt phonebookService wird manuell
+ * instanziert (als neuer PhoneServiceInMemory) und der Instanz von
+ * PhonebookResourcImpl übergeben
+ *
+ * @author adopleb
+ */
+public class PhonebookResourceImplTest {
+
+    private PhonebookResourceImpl phonebookResource;
     private UriInfo uriInfo;
+    private PhonebookService phoneService;
 
+    /**
+     * initialisiert die Komponenten
+     */
     @Before
     public void prepareResourcesToTest() {
+        phoneService = new PhoneServiceInMemory();
+        phonebookResource = new PhonebookResourceImpl();
+        phonebookResource.setPhoneService(phoneService);
 
-        usersResource = new PhonebookResourceImpl();
-        usersResource.setPhoneService(phoneService);
     }
 
+    /**
+     * Hilfsmethode, die die URI-Informationen bereitstellt als Mock-Objekt
+     * (Wird sonst vom Web-Server instanziiert)
+     */
     @Before
     public void mockUriInfo() {
 
@@ -73,7 +93,7 @@ public class UsersResourceImplTest extends BaseResourceTest {
 
 
         String expectedName = RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(10) + 1);
-        Response createUserResponse = usersResource.createUser(uriInfo, expectedName);
+        Response createUserResponse = phonebookResource.createUser(uriInfo, expectedName);
 
         PhoneUser createdUser = (PhoneUser) createUserResponse.getEntity();
 
@@ -88,11 +108,24 @@ public class UsersResourceImplTest extends BaseResourceTest {
         assertThat(location.getPath(), containsString("users/" + createdUser.getId()));
 
         // fetch the user by ID and compare it with the previously created user
-        Response fetchUserResponse = usersResource.getUser(createdUser.getId());
+        Response fetchUserResponse = phonebookResource.getUser(createdUser.getId());
         assertThat(fetchUserResponse.getStatus(), is(Status.OK.getStatusCode()));
 
         PhoneUser fetchedUser = (PhoneUser) fetchUserResponse.getEntity();
         assertThat(fetchedUser, is(createdUser));
+    }
+
+    /**
+     * Testet, ob das Anlegen eines Nutzer ohne Namen fehlschlägt *
+     *
+     */
+    @Test
+    public void createSingleUserFails() {
+
+        String name = "";
+        Response createUserResponse = phonebookResource.createUser(uriInfo, name);
+        assertThat(createUserResponse.getStatus(), is(Status.BAD_REQUEST.getStatusCode()));
+
     }
 
     /**
@@ -101,48 +134,9 @@ public class UsersResourceImplTest extends BaseResourceTest {
      */
     @Test
     public void fetchNotExistingUserGives404() {
-        Response fetchUserResponse = usersResource.getUser(Integer.MAX_VALUE);
+        Response fetchUserResponse = phonebookResource.getUser(Integer.MAX_VALUE);
 
         assertThat(fetchUserResponse.getStatus(), is(Status.NOT_FOUND.getStatusCode()));
-    }
-
-    /**
-     * Testet, dass alle Nutzer ausgegeben werden können
-     */
-    @Test
-    public void testFetchAllUsers() {
-
-        /* erzeuge zufälligen Nutzer */
-        PhoneUser randomUser = phoneService.createUser(RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(10) + 1));
-
-        Response fetchUserResponse = usersResource.listUsers();
-
-        assertThat(fetchUserResponse.getStatus(), is(Status.OK.getStatusCode()));
-        List allUsers = (List) fetchUserResponse.getEntity();
-
-        // Prüfe, dass Liste nicht leer ist
-        assertThat(allUsers.isEmpty(), is(false));
-
-        // lösche anschließend Nutzer
-        phoneService.deleteUser(randomUser.getId());
-
-    }
-
-    /**
-     * Testet, dass listUsers() 204 (no content) für eine leere List zuückgibt
-     */
-    @Test
-    public void testFetchAllUsersFromEmptyListGives204() {
-
-        // Lösche alle User und Teste dass List leer
-        phoneService.deleteAllUsers();
-        assertThat(phoneService.fetchAllUsers().isEmpty(), is(true));
-
-
-        // Prüfe, das listUsers StatusCode 204 zurückgibt
-        Response fetchUserResponse = usersResource.listUsers();
-        assertThat(fetchUserResponse.getStatus(), is(Status.NO_CONTENT.getStatusCode()));
-        List allUsers = (List) fetchUserResponse.getEntity();
     }
 
     /**
@@ -173,14 +167,14 @@ public class UsersResourceImplTest extends BaseResourceTest {
 
 
         // Füge Telefonnummer hinzu und prüfe auf Status Code 201 (created)
-        Response addNumberResponse = usersResource.addNumber(uriInfo, randomUser.getId(), randomNumber.getCaption(), randomNumber.getNumber());
+        Response addNumberResponse = phonebookResource.addNumber(uriInfo, randomUser.getId(), randomNumber.getCaption(), randomNumber.getNumber());
         assertThat(addNumberResponse.getStatus(), is(Status.CREATED.getStatusCode()));
 
         /*
          * rufe User ab und Prüfe, ob
          * neu erzeugte Nummber enthalten ist
          */
-        PhoneUser fetchedUserWithNumber = (PhoneUser) usersResource.getUser(randomUser.getId()).getEntity();
+        PhoneUser fetchedUserWithNumber = (PhoneUser) phonebookResource.getUser(randomUser.getId()).getEntity();
         assertThat(fetchedUserWithNumber.getPhoneNumbers().contains(randomNumber), is(true));
 
         /*----------------------------------*/
@@ -188,7 +182,7 @@ public class UsersResourceImplTest extends BaseResourceTest {
         /*----------------------------------*/
 
         // Prüfe dass Status-Code 200 zuückgegeben wird
-        Response deleteNumberResponse = usersResource.deleteNumber(randomUser.getId(), randomNumber.getCaption());
+        Response deleteNumberResponse = phonebookResource.deleteNumber(randomUser.getId(), randomNumber.getCaption());
         assertThat(deleteNumberResponse.getStatus(), is(Status.OK.getStatusCode()));
 
         // Prüfe, dass Nummer gelöscht wurde        
@@ -197,20 +191,33 @@ public class UsersResourceImplTest extends BaseResourceTest {
     }
 
     /**
-     * Testet, dass addNumber 404 zurückgibt, wenn kein User gefunden wurde
+     * Testet, dass addNumber 404 zurückgibt, wenn kein User gefunden wurde oder
+     * caption leer ist
      */
     @Test
-    public void checkAddNumberGives404() {
+    public void checkAddNumberGivesError() {
         // Lösche alle User
         phoneService.deleteAllUsers();
 
-        /* erzeuge zufällige Nummer und User*/
-        PhoneUser randomUser = new PhoneUser(RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(10) + 1));
+        /* erzeuge zufällige Daten*/
+        // zufälliger Nutzer wird erzeugt, aber nicht 
+        int randomID = RandomUtils.nextInt(10) + 13;
+        String phoneCaption = RandomStringUtils.randomAlphanumeric(10);
+        String phoneNumber = RandomStringUtils.randomAlphanumeric(10);
+
         PhoneNumber randomNumber = createRandomNumber();
 
         /* füge Nummer zu Nutzer hinzu und prüfe, dass 404 zurückgegben wird */
-        Response addNumberResponse = usersResource.addNumber(uriInfo, randomUser.getId(), randomNumber.getCaption(), randomNumber.getNumber());
+        Response addNumberResponse =
+                phonebookResource.addNumber(uriInfo, randomID, phoneCaption, phoneNumber);
         assertThat(addNumberResponse.getStatus(), is(Status.NOT_FOUND.getStatusCode()));
+
+        /* füge Nutzer hinzu und teste, dass addNumber() mit leerer caption  fehlschlägt */
+        PhoneUser user = phoneService.createUser(RandomStringUtils.randomAlphanumeric(10));
+        addNumberResponse =
+                phonebookResource.addNumber(uriInfo, user.getId(), "", "");
+        assertThat(addNumberResponse.getStatus(), is(Status.BAD_REQUEST.getStatusCode()));
+
     }
 
     /**
@@ -227,7 +234,7 @@ public class UsersResourceImplTest extends BaseResourceTest {
         /**
          * prüfen, dass 404 zurückgegeben wird, da User keine Nummer hat
          */
-        Response deleteNumberResponse = usersResource.deleteNumber(randomUser.getId(), randomNumber.getCaption());
+        Response deleteNumberResponse = phonebookResource.deleteNumber(randomUser.getId(), randomNumber.getCaption());
         assertThat(deleteNumberResponse.getStatus(), is(Status.NOT_FOUND.getStatusCode()));
 
         // Lösche alle User
@@ -236,7 +243,7 @@ public class UsersResourceImplTest extends BaseResourceTest {
         /**
          * prüfen, dass 404 zurückgegeben wird, da User nicht gefunden wurde
          */
-        deleteNumberResponse = usersResource.deleteNumber(randomUser.getId(), randomNumber.getCaption());
+        deleteNumberResponse = phonebookResource.deleteNumber(randomUser.getId(), randomNumber.getCaption());
         assertThat(deleteNumberResponse.getStatus(), is(Status.NOT_FOUND.getStatusCode()));
 
     }
@@ -254,7 +261,7 @@ public class UsersResourceImplTest extends BaseResourceTest {
          * prüfen, dass Status-Code 200 zuückgegeben wurde und PhoneUser
          * tatsächlich gelöscht wurde
          */
-        Response deleteUserResponse = usersResource.deleteUser(randomUser.getId());
+        Response deleteUserResponse = phonebookResource.deleteUser(randomUser.getId());
         assertThat(deleteUserResponse.getStatus(), is(Status.OK.getStatusCode()));
         assertThat(phoneService.fetchAllUsers().contains(randomUser), is(false));
 
@@ -262,7 +269,7 @@ public class UsersResourceImplTest extends BaseResourceTest {
          * prüfen, dass erneutes Löschen fehlschlägt (da User bereits gelöscht
          * wurde)
          */
-        deleteUserResponse = usersResource.deleteUser(randomUser.getId());
+        deleteUserResponse = phonebookResource.deleteUser(randomUser.getId());
         assertThat(deleteUserResponse.getStatus(), is(Status.NOT_FOUND.getStatusCode()));
 
     }

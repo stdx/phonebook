@@ -1,13 +1,17 @@
 package edu.htwm.vsp.phonebook.rest.impl;
 
+import java.net.URI;
+import java.util.List;
+
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+
 import edu.htwm.vsp.phone.service.PhoneUser;
 import edu.htwm.vsp.phone.service.PhonebookService;
 import edu.htwm.vsp.phonebook.rest.PhonebookResource;
-import java.net.URI;
-import java.util.LinkedList;
-import java.util.List;
-import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.Status;
 
 public class PhonebookResourceImpl implements PhonebookResource {
 
@@ -15,31 +19,24 @@ public class PhonebookResourceImpl implements PhonebookResource {
     private PhonebookService phoneService;
 
     @Override
-    public Response listUsers() {
-
-        // hole alle User
-        List<PhoneUser> allUsers = null;
-
-        // falls leer -> gebe StatusCode (NO CONTENT) 
-
-
-        // gebe Liste zurück
-        return Response.ok(allUsers).build();
-
-
-    }
-
-    @Override
     public Response createUser(UriInfo uriInfo, String name) {
 
+        // Falls keine Name angegeben -> Error 400 (Bad Request)
+        if (name.isEmpty()) {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
+
+
         PhoneUser newUser = getPhoneService().createUser(name);
+        Response createdResponse = Response.created(toUri(uriInfo, newUser)).entity(newUser).build();
+        return createdResponse;
+    }
 
-
-
+    private URI toUri(UriInfo uriInfo, PhoneUser user) {
         UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
-        URI created = absolutePathBuilder.path(PhonebookResource.class, "getUser").build(newUser.getId());
-
-        return Response.created(created).entity(newUser).build();
+        URI userUri = absolutePathBuilder.path(PhonebookResource.class, "getUser").build(user.getId());
+        return userUri;
     }
 
     @Override
@@ -72,9 +69,14 @@ public class PhonebookResourceImpl implements PhonebookResource {
 
         // Falls der User nicht existiert -> gebe Fehler-Code 404 zurück
 
-
-        // setze Telefonnummer
-
+        // Falls der User nicht existiert -> breche ab mit Fehler-Code 404
+        if (user == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        // Falls  caption leer -> gebe Error 400 zurück
+        if (caption.isEmpty()) {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
 
         // gebe User zurück
         UriBuilder absolutePathBuilder = uriInfo.getAbsolutePathBuilder();
@@ -103,10 +105,14 @@ public class PhonebookResourceImpl implements PhonebookResource {
         // Falls der User nicht existiert -> gebe Fehler-Code 404 zurück
 
         // Falls der User die Nummer mit der Caption nicht enthält -> Fehler 404
+         
 
         // lösche Nummer
 
         // gebe OK zurück
+        
+        
+        
         return Response.ok().entity(user).build();
     }
 }

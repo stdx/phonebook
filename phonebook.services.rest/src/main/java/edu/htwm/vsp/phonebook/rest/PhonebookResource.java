@@ -12,7 +12,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import edu.htwm.vsp.phone.service.PhoneUser;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 
@@ -32,6 +34,7 @@ public interface PhonebookResource {
      * @return 201 CREATED and the path for accessing the new user, an
      * appropriate status code otherwise.
      */
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @POST
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response createUser(
@@ -49,57 +52,34 @@ public interface PhonebookResource {
     @Path("{" + USER_ID_PARAM + "}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response getUser(
-            @PathParam(USER_ID_PARAM) int userID);
+             @PathParam(USER_ID_PARAM) int userID);
 
     /**
-     * Methode fügt eine Telefonnummer zu einem User hinzu. Dazu erhält sie als
-     * Parameter caption und number.
+     * fügt zu einem Nutzer eine Telefonnummer hinzu Aufruf: PUT
+     * http://localhost:8080/users/{user_id}/numbers/{caption}?number=1234
      *
-     * Aufruf: POST: http://localhost:8080/users/{user_id} - Soll XML oder JSON
-     * zurückliefern - erhält Caption und Number als Form-Parameter - userID
-     * soll als Path-Parameter übergeben werden
+     * - erhält Caption und userID als Path-Parameter - number wird als
+     * Query-Parameter übergeben und soll als Standard-Wert (DefaultValue) den
+     * leeren String erhalten
      *
-     * @return
+     *
+     * @return 201 falls Nummer erfolgreich angelegt wurd
      */
-    Response addNumber(
-            @Context UriInfo uriInfo,
-            int userID,
-            String caption,
-            String number);
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    Response addNumber(@Context UriInfo uriInfo, int userID, String caption, String number);
 
     /**
-     * Methode löscht eine Telefonnummer eines Users und erhält dazu die
-     * captions
+     * Methode löscht eine Telefonnummer eines Users und erhält dazu die caption
      *
      * Aufruf: DELETE: http://localhost:8080/users/{user_id}/numbers/{caption}
      *
-     * - erhält Caption und userID als Path-Parameter -
+     * - erhält Caption und userID als Path-Parameter
      *
-     * @return
+     * @return 200 falls Nummer gelöscht wurde, 404 falls User oder Nummer nicht
+     * gefunden
      */
-    Response deleteNumber(
-            int userID,
-            String caption);
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    Response deleteNumber(int userID, String caption);
 
-    /**
-     * Methode liefert eine Liste aller PhoneUser zurück
-     *
-     * Aufruf: GET: http://localhost:8080/users - Soll XML oder JSON
-     * zurückliefern
-     *
-     * @return
-     */
-    Response listUsers();
-
-    /**
-     * Methode löscht einen vorhandenen User
-     *
-     * Aufruf: DELETE: http://localhost:8080/users/{user_id}/
-     *
-     * - erhält userID als Path-Parameter -
-     *
-     * @return
-     */
-    Response deleteUser(
-            int userID);
+    Response deleteUser(int userID);
 }
