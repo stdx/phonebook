@@ -94,7 +94,8 @@ public class PhonebookResourceImpl implements PhonebookResource {
     @Override
     public Response deleteNumber(int userID, String caption) {
         //hole User
-
+        PhoneUser user = null;
+        
         // Falls der User nicht existiert -> breche ab mit Fehler-Code 404
         
 
